@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 /**
  * Container for concurrent audio samples.
  */
@@ -8,6 +10,8 @@ class AudioFrame
 public:
 	/**
 	 * Create new AudioFrame with the given number of channels.
+	 *
+	 * @throw InvalidFrameException If numChannels is not greater than zero.
 	 */
 	AudioFrame(int numChannels);
 
@@ -44,4 +48,10 @@ public:
 	 * @return The number of channels.
 	 */
 	int getNumChannels();
+private:
+	float* samples;
+	int numChannels;
+
+	bool isChannelInBounds(int channelIndex);
+	bool isSampleInBounds(float sample);
 };

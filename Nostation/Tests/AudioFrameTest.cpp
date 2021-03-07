@@ -4,6 +4,8 @@
 #include "../Source/AudioFrame.h"
 #include "../Source/AudioFrame.cpp"
 #include "../Source/Exceptions/IndexOutOfBoundsException.h"
+#include "../Source/Exceptions/InvalidFrameException.h"
+#include "../Source/Exceptions/InvalidSampleException.h"
 
 BOOST_AUTO_TEST_SUITE(AudioFrameTest);
 
@@ -13,6 +15,9 @@ BOOST_AUTO_TEST_SUITE(AudioFrameTest);
 		BOOST_CHECK_EQUAL(frame.getNumChannels(), 2);
 		BOOST_CHECK_EQUAL(frame.readSampleAt(0), 0.0f);
 		BOOST_CHECK_EQUAL(frame.readSampleAt(1), 0.0f);
+		BOOST_CHECK_THROW(AudioFrame(0), InvalidFrameException);
+		BOOST_CHECK_THROW(AudioFrame(-1), InvalidFrameException);
+		BOOST_CHECK_THROW(AudioFrame(-100), InvalidFrameException);
 	}
 
 	BOOST_AUTO_TEST_CASE(AudioFrameWriteSampleAt)
@@ -20,7 +25,7 @@ BOOST_AUTO_TEST_SUITE(AudioFrameTest);
 		auto frame = AudioFrame(2);
 		BOOST_CHECK_NO_THROW(frame.writeSampleAt(0, 0.5f));
 		BOOST_CHECK_EQUAL(frame.readSampleAt(0), 0.5f);
-		BOOST_CHECK_NO_THROW(frame.writeSampleAt(0, -0.5f));
+		BOOST_CHECK_NO_THROW(frame.writeSampleAt(1, -0.5f));
 		BOOST_CHECK_EQUAL(frame.readSampleAt(1), -0.5f);
 		BOOST_CHECK_EQUAL(frame.readSampleAt(0), 0.5f);
 		BOOST_CHECK_NO_THROW(frame.writeSampleAt(0, 1.0f));
@@ -35,13 +40,13 @@ BOOST_AUTO_TEST_SUITE(AudioFrameTest);
 		BOOST_CHECK_THROW(frame.writeSampleAt(-100, 0.0f),
 			IndexOutOfBoundsException);
 		BOOST_CHECK_THROW(frame.writeSampleAt(0, 1.001f),
-			IndexOutOfBoundsException);
+			InvalidSampleException);
 		BOOST_CHECK_THROW(frame.writeSampleAt(0, -1.001f),
-			IndexOutOfBoundsException);
+			InvalidSampleException);
 		BOOST_CHECK_THROW(frame.writeSampleAt(0, 100.0f),
-			IndexOutOfBoundsException);
+			InvalidSampleException);
 		BOOST_CHECK_THROW(frame.writeSampleAt(0, -100.0f),
-			IndexOutOfBoundsException);
+			InvalidSampleException);
 	}
 
 	BOOST_AUTO_TEST_CASE(AudioFrameReadSampleAt)
