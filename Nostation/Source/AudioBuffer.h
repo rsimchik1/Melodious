@@ -20,6 +20,8 @@ class AudioBuffer
 public:
 	/**
 	 * Create a new AudioBuffer of fixed size {numFrames * numChannels}.
+	 *
+	 * @throw InvalidBufferException If numFrames <=0 or numChannels <= 0.
 	 */
 	AudioBuffer(int numFrames, int numChannels);
 
@@ -86,4 +88,6 @@ public:
 	 * @return The number of channels.
 	 */
 	int getNumChannels();
+private:
+	AudioFrame* frames;
 };
