@@ -19,8 +19,8 @@ public:
 	/**
 	 * Read the sample at a given channelIndex.
 	 *
-	 * @throw IndexOutOfBounds If channelIndex is less than zero or too large
-	 * for this frame.
+	 * @throw IndexOutOfBoundsException If channelIndex is less than zero or too
+	 * large for this frame.
 	 * @param channelIndex Index of the channel to be read.
 	 * @return The sample at the given index.
 	 */
@@ -29,9 +29,9 @@ public:
 	/**
 	 * Write a given sample to a given channel.
 	 *
-	 * @throw IndexOutOfBounds If channelIndex is less than zero or too large
-	 * for this frame.
-	 * @throw InvalidSample If sample is less than -1 or greater than 1.
+	 * @throw IndexOutOfBoundsException If channelIndex is less than zero or too
+	 * large for this frame.
+	 * @throw InvalidSampleException If sample is less than -1 or greater than 1.
 	 * @param channelIndex Index of the channel to which the sample will be
 	 * written.
 	 * @param sample The sample to write.
