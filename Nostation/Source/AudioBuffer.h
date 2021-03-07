@@ -38,7 +38,7 @@ public:
 	 * @param frameIndex Index of the frame to be read.
 	 * @return An AudioFrame object containing 
 	 */
-	AudioFrame readFrameAt(int frameIndex);
+	const AudioFrame readFrameAt(int frameIndex);
 
 	/**
 	 * Set frame at the given index.
@@ -89,5 +89,13 @@ public:
 	 */
 	int getNumChannels();
 private:
-	AudioFrame* frames;
+	int numChannels;
+	int numFrames;
+	float* samples;	// 1-dim for quick access - client can use frames if needed
+
+	bool isFrameInBounds(int frameIndex);
+	bool isSampleValid(float sample);
+	bool isChannelInBounds(int channelIndex);
+	bool isFrameValid(const AudioFrame& frame);
+	int getSampleIndex(int frameIndex, int channelIndex);
 };

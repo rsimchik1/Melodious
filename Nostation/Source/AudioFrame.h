@@ -16,6 +16,13 @@ public:
 	AudioFrame(int numChannels);
 
 	/**
+	 * Creates a copy of the passed AudioFrame.
+	 *
+	 * @param AudioFrame to copy.
+	 */
+	AudioFrame(const AudioFrame& toCopy);
+
+	/**
 	 * Delete this AudioFrame.
 	 */
 	~AudioFrame();
@@ -28,7 +35,7 @@ public:
 	 * @param channelIndex Index of the channel to be read.
 	 * @return The sample at the given index.
 	 */
-	float readSampleAt(int channelIndex);
+	float readSampleAt(int channelIndex) const;
 
 	/**
 	 * Write a given sample to a given channel.
@@ -47,11 +54,11 @@ public:
 	 *
 	 * @return The number of channels.
 	 */
-	int getNumChannels();
+	int getNumChannels() const;
 private:
 	float* samples;
 	int numChannels;
 
-	bool isChannelInBounds(int channelIndex);
-	bool isSampleInBounds(float sample);
+	bool isChannelInBounds(int channelIndex) const;
+	bool isSampleInBounds(float sample) const;
 };

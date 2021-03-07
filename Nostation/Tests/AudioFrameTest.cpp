@@ -18,6 +18,10 @@ BOOST_AUTO_TEST_SUITE(AudioFrameTest);
 		BOOST_CHECK_THROW(AudioFrame(0), InvalidFrameException);
 		BOOST_CHECK_THROW(AudioFrame(-1), InvalidFrameException);
 		BOOST_CHECK_THROW(AudioFrame(-100), InvalidFrameException);
+		auto copy = AudioFrame(frame);
+		BOOST_CHECK_EQUAL(copy.getNumChannels(), frame.getNumChannels());
+		BOOST_CHECK_EQUAL(copy.readSampleAt(0), frame.readSampleAt(0));
+		BOOST_CHECK_EQUAL(copy.readSampleAt(1), frame.readSampleAt(1));
 	}
 
 	BOOST_AUTO_TEST_CASE(AudioFrameWriteSampleAt)

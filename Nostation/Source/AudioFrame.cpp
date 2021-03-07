@@ -14,12 +14,20 @@ AudioFrame::AudioFrame(int numChannels)
 		samples[i] = 0.0f;
 }
 
+AudioFrame::AudioFrame(const AudioFrame& toCopy)
+{
+	this->numChannels = toCopy.numChannels;
+	samples = new float[numChannels];
+	for (auto i = 0; i < numChannels; i++)
+		samples[i] = toCopy.samples[i];
+}
+
 AudioFrame::~AudioFrame()
 {
 	delete[] samples;
 }
 
-float AudioFrame::readSampleAt(int channelIndex)
+float AudioFrame::readSampleAt(int channelIndex) const
 {
 	if (!isChannelInBounds(channelIndex)) 
 		throw IndexOutOfBoundsException();
@@ -37,17 +45,17 @@ void AudioFrame::writeSampleAt(int channelIndex, float sample)
 	samples[channelIndex] = sample;
 }
 
-int AudioFrame::getNumChannels()
+int AudioFrame::getNumChannels() const
 {
 	return numChannels;
 }
 
-bool AudioFrame::isChannelInBounds(int channelIndex)
+bool AudioFrame::isChannelInBounds(int channelIndex) const
 {
 	return channelIndex >= 0 && channelIndex < getNumChannels();
 }
 
-bool AudioFrame::isSampleInBounds(float sample)
+bool AudioFrame::isSampleInBounds(float sample) const
 {
 	return sample >= -1.0f && sample <= 1.0f;
 }

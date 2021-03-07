@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_CASE(AudioBufferWriteFrameAt)
 	buffer.writeFrameAt(3, goodFrame);
 	auto checkFrame = buffer.readFrameAt(3);
 	BOOST_CHECK_EQUAL(checkFrame.readSampleAt(0), goodFrame.readSampleAt(0));
-	BOOST_CHECK_EQUAL(checkFrame.readSampleAt(1), goodFrame.readSampleAt(0));
+	BOOST_CHECK_EQUAL(checkFrame.readSampleAt(1), goodFrame.readSampleAt(1));
 	BOOST_CHECK_THROW(buffer.writeFrameAt(3, badFrame), InvalidFrameException);
 	BOOST_CHECK_THROW(buffer.writeFrameAt(-1, goodFrame), IndexOutOfBoundsException);
 	BOOST_CHECK_THROW(buffer.writeFrameAt(8, goodFrame), IndexOutOfBoundsException);
