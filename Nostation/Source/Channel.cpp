@@ -1,5 +1,5 @@
 #include "Channel.h"
 
-void Channel::setParent(Channel *)
+void Channel::setParent(Channel *newParent)
 {
 }
