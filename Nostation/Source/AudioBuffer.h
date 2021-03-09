@@ -1,6 +1,8 @@
 #pragma once
 #include "AudioFrame.h"
 
+#include <vector>
+
 /**
  * Standard n-dimensional container for streams of audio data
  * (n = number of channels).
@@ -25,10 +27,7 @@ public:
 	 */
 	AudioBuffer(int numFrames, int numChannels);
 
-	/**
-	 * Delete this AudioBuffer.
-	 */
-	~AudioBuffer();
+	AudioBuffer(const AudioBuffer& toCopy);
 	
 	/**
 	 * Return a frame containing sample(s) at the given index.
@@ -38,7 +37,7 @@ public:
 	 * @param frameIndex Index of the frame to be read.
 	 * @return An AudioFrame object containing 
 	 */
-	const AudioFrame readFrameAt(int frameIndex);
+	AudioFrame readFrameAt(int frameIndex) const;
 
 	/**
 	 * Set frame at the given index.
@@ -61,7 +60,7 @@ public:
 	 * @param channelIndex of the channel containing the sample.
 	 * @return The sample (float) at the given indexes.
 	 */
-	float readSampleAt(int frameIndex, int channelIndex);
+	float readSampleAt(int frameIndex, int channelIndex) const;
 
 	/**
 	 * Write an individual sample at the given frame and channel index.
@@ -72,6 +71,7 @@ public:
 	 * @param frameIndex Index of the frame to which the sample will be written.
 	 * @param channelIndex Index of the channel to which the sample will be
 	 * written.
+	 * @param sample Value of the sample to be written.
 	 */
 	void writeSampleAt(int frameIndex, int channelIndex, float sample);
 
@@ -80,22 +80,22 @@ public:
 	 *
 	 * @return The number of frames.
 	 */
-	int getNumFrames();
+	int getNumFrames() const;
 
 	/**
 	 * Get the number of channels in this buffer.
 	 *
 	 * @return The number of channels.
 	 */
-	int getNumChannels();
+	int getNumChannels() const;
 private:
 	int numChannels;
 	int numFrames;
-	float* samples;	// 1-dim for quick access - client can use frames if needed
+	std::vector<float> samples;	// 1-dim for internal quick access
 
-	bool isFrameInBounds(int frameIndex);
-	bool isSampleValid(float sample);
-	bool isChannelInBounds(int channelIndex);
-	bool isFrameValid(const AudioFrame& frame);
-	int getSampleIndex(int frameIndex, int channelIndex);
+	bool isFrameInBounds(int frameIndex) const;
+	bool isSampleValid(float sample) const;
+	bool isChannelInBounds(int channelIndex) const;
+	bool isFrameValid(const AudioFrame& frame) const;
+	int getSampleIndex(int frameIndex, int channelIndex) const;
 };

@@ -12,17 +12,21 @@ AudioBuffer::AudioBuffer(int numFrames, int numChannels)
 	this->numChannels = numChannels;
 	this->numFrames = numFrames;
 
-	samples = new float[numFrames * numChannels];
+	samples = std::vector<float>(numFrames * numChannels);
 	for (auto i = 0; i < numFrames * numChannels; i++)
 		samples[i] = 0.0f;
 }
 
-AudioBuffer::~AudioBuffer()
+AudioBuffer::AudioBuffer(const AudioBuffer& toCopy)
 {
-	delete[] samples;
+	this->numChannels = toCopy.numChannels;
+	this->numFrames = toCopy.numFrames;
+
+	samples = std::vector<float>(numFrames * numChannels);
+	std::copy(std::begin(toCopy.samples), std::end(toCopy.samples), std::begin((samples)));
 }
 
-const AudioFrame AudioBuffer::readFrameAt(int frameIndex)
+AudioFrame AudioBuffer::readFrameAt(int frameIndex) const
 {
 	if (!isFrameInBounds(frameIndex))
 		throw IndexOutOfBoundsException();
@@ -45,7 +49,7 @@ void AudioBuffer::writeFrameAt(int frameIndex, const AudioFrame& frame)
 		samples[getSampleIndex(frameIndex, channel)] = frame.readSampleAt(channel);
 }
 
-float AudioBuffer::readSampleAt(int frameIndex, int channelIndex)
+float AudioBuffer::readSampleAt(int frameIndex, int channelIndex) const
 {
 	if (!isFrameInBounds(frameIndex) || !isChannelInBounds(channelIndex))
 		throw IndexOutOfBoundsException();
@@ -63,38 +67,38 @@ void AudioBuffer::writeSampleAt(int frameIndex, int channelIndex, float sample)
 	samples[getSampleIndex(frameIndex, channelIndex)] = sample;
 }
 
-int AudioBuffer::getNumFrames()
+int AudioBuffer::getNumFrames() const
 {
 	return numFrames;
 }
 
-int AudioBuffer::getNumChannels()
+int AudioBuffer::getNumChannels() const
 {
 	return numChannels;
 }
 
-bool AudioBuffer::isFrameInBounds(int frameIndex)
+bool AudioBuffer::isFrameInBounds(int frameIndex) const
 {
 	return frameIndex >= 0 && frameIndex < numFrames;
 }
 
-bool AudioBuffer::isSampleValid(float sample)
+bool AudioBuffer::isSampleValid(float sample) const
 {
 	return sample >= -1 && sample <= 1;
 }
 
-bool AudioBuffer::isChannelInBounds(int channelIndex)
+bool AudioBuffer::isChannelInBounds(int channelIndex) const
 {
 	return channelIndex >= 0 && channelIndex < numChannels;
 }
 
-bool AudioBuffer::isFrameValid(const AudioFrame& frame)
+bool AudioBuffer::isFrameValid(const AudioFrame& frame) const
 {
 	return frame.getNumChannels() == getNumChannels();
 }
 
 
-int AudioBuffer::getSampleIndex(int frameIndex, int channelIndex)
+int AudioBuffer::getSampleIndex(int frameIndex, int channelIndex) const
 {
 	return channelIndex + frameIndex * numChannels;
 }

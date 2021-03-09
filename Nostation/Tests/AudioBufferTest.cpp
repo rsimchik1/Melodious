@@ -11,7 +11,7 @@
 
 BOOST_AUTO_TEST_SUITE(AudioBufferTest);
 
-void populateTestBuffer(AudioBuffer& toPopulate, int numChannels)
+void populateTestBuffer(AudioBuffer& toPopulate)
 {
 	const int numFrames = 8;
 	float channel1[numFrames] = { 0.0f, 0.3f, 0.5f, 0.4f, 0.1f, -0.3f, -0.5f, -0.7f };
@@ -19,7 +19,7 @@ void populateTestBuffer(AudioBuffer& toPopulate, int numChannels)
 
 	for (auto frame = 0; frame < numFrames; frame++)
 	{
-		for (auto channel = 0; channel < numChannels; channel++)
+		for (auto channel = 0; channel < toPopulate.getNumChannels(); channel++)
 		{
 			toPopulate.writeSampleAt(frame, channel, channel % 2 == 0 ? 
 				channel1[frame] : channel2[frame]);
@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(AudioBufferConstructor)
 	BOOST_CHECK_EQUAL(buffer.getNumFrames(), 8);
 	BOOST_CHECK_EQUAL(buffer.getNumChannels(), 2);
 	for (auto frame = 0; frame < 8; frame++)
-		for (auto channel = 0; channel < 0; channel++)
+		for (auto channel = 0; channel < buffer.getNumChannels(); channel++)
 			BOOST_CHECK_EQUAL(buffer.readSampleAt(frame, channel), 0.0f);
 
 	BOOST_CHECK_THROW(AudioBuffer(0, 2), InvalidBufferException);
@@ -42,10 +42,22 @@ BOOST_AUTO_TEST_CASE(AudioBufferConstructor)
 	BOOST_CHECK_THROW(AudioBuffer(8, -100), InvalidBufferException);
 }
 
+BOOST_AUTO_TEST_CASE(AudioBufferCopy)
+{
+	auto buffer = AudioBuffer(8, 2);
+	populateTestBuffer(buffer);
+	auto bufferCopy = AudioBuffer(buffer);
+	BOOST_CHECK_EQUAL(bufferCopy.getNumFrames(), buffer.getNumFrames());
+	BOOST_CHECK_EQUAL(bufferCopy.getNumChannels(), buffer.getNumChannels());
+	for (auto frame = 0; frame < 8; frame++)
+		for (auto channel = 0; channel < buffer.getNumChannels(); channel++)
+			BOOST_CHECK_EQUAL(buffer.readSampleAt(frame, channel), bufferCopy.readSampleAt(frame, channel));
+}
+
 BOOST_AUTO_TEST_CASE(AudioBufferReadFrameAt)
 {
 	auto buffer = AudioBuffer(8, 2);
-	populateTestBuffer(buffer, 2);
+	populateTestBuffer(buffer);
 	auto frame1 = buffer.readFrameAt(0);
 	BOOST_CHECK_EQUAL(frame1.readSampleAt(0), 0.0f);
 	BOOST_CHECK_EQUAL(frame1.readSampleAt(1), 0.0f);
@@ -64,7 +76,7 @@ BOOST_AUTO_TEST_CASE(AudioBufferReadFrameAt)
 BOOST_AUTO_TEST_CASE(AudioBufferWriteFrameAt)
 {
 	auto buffer = AudioBuffer(8, 2);
-	populateTestBuffer(buffer, 2);
+	populateTestBuffer(buffer);
 	auto goodFrame = AudioFrame(2);
 	goodFrame.writeSampleAt(0, 0.5f);
 	goodFrame.writeSampleAt(1, -0.5f);
@@ -84,7 +96,7 @@ BOOST_AUTO_TEST_CASE(AudioBufferWriteFrameAt)
 BOOST_AUTO_TEST_CASE(AudioBufferReadSampleAt)
 {
 	auto buffer = AudioBuffer(8, 2);
-	populateTestBuffer(buffer, 2);
+	populateTestBuffer(buffer);
 	BOOST_CHECK_EQUAL(buffer.readSampleAt(0, 0), 0.0f);
 	BOOST_CHECK_EQUAL(buffer.readSampleAt(0, 1), 0.0f);
 	BOOST_CHECK_EQUAL(buffer.readSampleAt(7, 0), -0.7f);
@@ -104,7 +116,7 @@ BOOST_AUTO_TEST_CASE(AudioBufferReadSampleAt)
 BOOST_AUTO_TEST_CASE(AudioBufferWriteSampleAt)
 {
 	auto buffer = AudioBuffer(8, 2);
-	populateTestBuffer(buffer, 2);
+	populateTestBuffer(buffer);
 	buffer.writeSampleAt(3, 0, 0.5f);
 	buffer.writeSampleAt(3, 1, -0.5f);
 	BOOST_CHECK_EQUAL(buffer.readSampleAt(3, 0), 0.5f);

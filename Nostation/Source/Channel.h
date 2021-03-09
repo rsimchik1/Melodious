@@ -1,4 +1,5 @@
 #pragma once
+#include "AudioBuffer.h"
 
 
 /**
@@ -18,20 +19,47 @@ public:
 	 * Children are processed depth-first.
 	 *
 	 * @param numFrames The number of frames to process.
-	 * @return The number of frames that were processed (should match input).
+	 * @return The processed frames.
 	 */
-	virtual int processFrames(int numFrames) = 0;
-
+	virtual AudioBuffer processFrames(int numFrames) = 0;
+	
 	/**
 	 * Set this node's parent to the given node. If this node already has a
 	 * parent, it will be replaced. If input is null, this node will be detached
-	 * from the tree. Parent nodes will have their children updated here.
+	 * from the parent. Parent node will have its children updated.
 	 *
-	 * @throw InvalidChannelTreeException If the output channel is a leaf node,
-	 * or if null is passed while this node is already detached.
+	 * @throw InvalidChannelTreeException If the parent channel is a leaf node.
 	 * @param newParent The new parent node of this Channel.
 	 */
 	void setParent(Channel *newParent);
+
+	/**
+	 * Detach this node from parent. Same as calling setParent(nullptr). If
+	 * node is already detached, nothing will happen.
+	 */
+	void removeParent();
+
+	/**
+	 * Get the pointer to this Channel's parent.
+	 *
+	 * @return Parent Channel's pointer, or null if there is none.
+	 */
+	Channel* getParent();
+
+	/**
+	 * Determine whether this Channel has a parent.
+	 *
+	 * @return True if node has a parent, false otherwise.
+	 */
+	bool hasParent();
+
+	/**
+	 * Search this Channel's children for the given Channel.
+	 *
+	 * @param childToFind Pointer to the Channel to be found.
+	 * @return True if childToFind is a child of this Channel, false otherwise.
+	 */
+	virtual bool hasChild(Channel* childToFind) = 0;
 protected:
 	/**
 	 * Add the given node to this node's children.
