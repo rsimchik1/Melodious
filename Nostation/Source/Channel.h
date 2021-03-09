@@ -36,6 +36,9 @@ public:
 	/**
 	 * Detach this node from parent. Same as calling setParent(nullptr). If
 	 * node is already detached, nothing will happen.
+	 *
+	 * @throw InvalidChannelTreeException If this Channel's parent is a
+	 * LeafChannel (this should never happen).
 	 */
 	void removeParent();
 
@@ -59,26 +62,25 @@ public:
 	 * @param childToFind Pointer to the Channel to be found.
 	 * @return True if childToFind is a child of this Channel, false otherwise.
 	 */
-	virtual bool hasChild(Channel* childToFind) = 0;
+	virtual bool hasChild(const Channel* childToFind) = 0;
 protected:
 	/**
 	 * Add the given node to this node's children.
 	 *
-	 * @throw InvalidChannelTreeException If this is a leaf node, or if the node
-	 * already exists in the tree.
+	 * @throw InvalidChannelTreeException If this is a leaf node.
+	 * @throw InvalidArgumentException If the child already exists.
 	 * @param newChild The node to be added.
 	 */
-	virtual void addChild(const Channel *newChild) = 0;
+	virtual void addChild(Channel *newChild) = 0;
 
 	/**
 	 * Search children for the given node, and remove it if found.
 	 *
-	 * @throw InvalidChannelTreeException If this is a leaf node, or if the
-	 * input node cannot be found.
-	 * @throw InvalidArgumentException If the input is null.
+	 * @throw InvalidChannelTreeException If this is a leaf node.
+	 * @throw InvalidArgumentException If the input is null or cannot be found.
 	 * @param childToRemove The node to remove.
 	 */
-	virtual void removeChild(const Channel *childToRemove) = 0;
+	virtual void removeChild(Channel *childToRemove) = 0;
 private:
-	Channel* parent;
+	Channel* parent = nullptr;
 };

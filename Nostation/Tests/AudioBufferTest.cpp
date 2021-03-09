@@ -135,6 +135,21 @@ BOOST_AUTO_TEST_CASE(AudioBufferWriteSampleAt)
 	BOOST_CHECK_THROW(buffer.writeSampleAt(3, 100, 0.5f), IndexOutOfBoundsException);
 }
 
+BOOST_AUTO_TEST_CASE(AudioBufferAdd)
+{
+	int frames = 8, channels = 2;
+	auto buffer1 = AudioBuffer(frames, channels);
+	auto buffer2 = AudioBuffer(frames, channels);
+	populateTestBuffer(buffer1);
+	populateTestBuffer(buffer2);
+	auto buffer3 = AudioBuffer(buffer2);
+	buffer3.addBuffer(buffer1);
+	for (int frame = 0; frame < frames; frame++)
+		for (int channel = 0; channel < channels; channel++)
+			BOOST_CHECK_EQUAL(buffer3.readSampleAt(frame, channel),
+				buffer1.readSampleAt(frame, channel) + buffer2.readSampleAt(frame, channel));
+}
+
 BOOST_AUTO_TEST_CASE(AudioBufferGetNumFrames)
 {
 	auto buffer1 = AudioBuffer(4, 2);

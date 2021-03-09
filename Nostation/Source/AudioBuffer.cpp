@@ -3,6 +3,7 @@
 #include "Exceptions/InvalidBufferException.h"
 #include "Exceptions/InvalidSampleException.h"
 #include "Exceptions/IndexOutOfBoundsException.h"
+#include "Exceptions/InvalidArgumentException.h"
 
 AudioBuffer::AudioBuffer(int numFrames, int numChannels)
 {
@@ -65,6 +66,22 @@ void AudioBuffer::writeSampleAt(int frameIndex, int channelIndex, float sample)
 		throw InvalidSampleException();
 
 	samples[getSampleIndex(frameIndex, channelIndex)] = sample;
+}
+
+void AudioBuffer::addBuffer(const AudioBuffer& otherBuffer)
+{
+	if (otherBuffer.numFrames != this->numFrames || 
+		otherBuffer.numChannels != this->numChannels)
+	{
+		throw InvalidArgumentException();
+	}
+	else
+	{
+		for (int i = 0; i < numFrames * numChannels; i++)
+		{
+			this->samples[i] += otherBuffer.samples[i];
+		}
+	}
 }
 
 int AudioBuffer::getNumFrames() const

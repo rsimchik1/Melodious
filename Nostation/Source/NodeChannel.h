@@ -19,10 +19,10 @@ public:
 	NodeChannel(Channel* parent = nullptr);
 	~NodeChannel();
 	AudioBuffer processFrames(int numFrames) override;
-	bool hasChild(Channel* childToFind) override;
+	bool hasChild(const Channel* childToFind) override;
 protected:
-	void addChild(const Channel* newChild) override;
-	void removeChild(const Channel* childToRemove) override;
+	void addChild(Channel* newChild) override;
+	void removeChild(Channel* childToRemove) override;
 private:
 	std::vector<Channel*> children;
 };

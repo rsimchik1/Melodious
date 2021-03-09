@@ -15,6 +15,8 @@
  * All frames in an AudioBuffer must contain the same number of
  * samples/channels. An AudioBuffer's size is fixed at instantiation.
  *
+ * TODO allow conversions between buffers of different dimensions
+ *
  * @authors Richard Simchik
  */
 class AudioBuffer
@@ -67,13 +69,24 @@ public:
 	 *
 	 * @throw IndexOutOfBoundsException If frameIndex or channelIndex is less
 	 * than zero or too large for this buffer.
-	 * @throw InvalidSample If sample is less than -1 or greater than 1.
+	 * @throw InvalidSampleException If sample is less than -1 or greater than 1.
 	 * @param frameIndex Index of the frame to which the sample will be written.
 	 * @param channelIndex Index of the channel to which the sample will be
 	 * written.
 	 * @param sample Value of the sample to be written.
 	 */
 	void writeSampleAt(int frameIndex, int channelIndex, float sample);
+
+	/**
+	 * Add all samples in otherBuffer to this buffer's samples.
+	 * a[i] += b[i]
+	 *
+	 * @throw InvalidArgumentException If otherBuffer's dimensions do not match
+	 * this buffer's dimensions.
+	 * @param otherBuffer Buffer whose samples will be added to this buffer's
+	 * samples.
+	 */
+	void addBuffer(const AudioBuffer& otherBuffer);
 
 	/**
 	 * Get the total number of frames in this buffer.

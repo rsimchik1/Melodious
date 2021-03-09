@@ -1,27 +1,43 @@
 #include "LeafChannel.h"
+#include "Exceptions/InvalidChannelTreeException.h"
 
 LeafChannel::LeafChannel(Channel* parent)
 {
+	// TODO parameterize audioSource when Track class is more fleshed out
+	audioSource = new Track();
+	try
+	{
+		setParent(parent);
+	}
+	catch (InvalidChannelTreeException e)
+	{
+		throw e;
+	}
 }
 
 LeafChannel::~LeafChannel()
 {
+	removeParent();
+	delete audioSource;
 }
 
 AudioBuffer LeafChannel::processFrames(int numFrames)
 {
+	// TODO get frames from audioSource
 	return AudioBuffer(numFrames, 2);
 }
 
-bool LeafChannel::hasChild(Channel* childToFind)
+bool LeafChannel::hasChild(const Channel* childToFind)
 {
 	return false;
 }
 
-void LeafChannel::addChild(const Channel* newChild)
+void LeafChannel::addChild(Channel* newChild)
 {
+	throw InvalidChannelTreeException();
 }
 
-void LeafChannel::removeChild(const Channel* childToRemove)
+void LeafChannel::removeChild(Channel* childToRemove)
 {
+	throw InvalidChannelTreeException();
 }

@@ -76,7 +76,7 @@ BOOST_AUTO_TEST_CASE(ChannelParentChildTest)
 	BOOST_CHECK(validChild1.getParent() == nullptr);
 	BOOST_CHECK(!validParent.hasChild(&validChild1));
 
-	auto validParent2 = NodeChannel(validParent);
+	auto validParent2 = NodeChannel(&validParent);
 	BOOST_CHECK(validParent2.hasParent());
 	BOOST_CHECK(validParent2.getParent() == &validParent);
 	BOOST_CHECK(validParent.hasChild(&validParent2));
