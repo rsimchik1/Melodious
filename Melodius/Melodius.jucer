@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="W4DsqV" name="Nostation" projectType="guiapp" useAppConfig="0"
+<JUCERPROJECT id="W4DsqV" name="Melodius" projectType="guiapp" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="0" jucerFormatVersion="1"
               version="0.1">
-  <MAINGROUP id="gpzsIS" name="Nostation">
+  <MAINGROUP id="gpzsIS" name="Melodius">
     <GROUP id="{1587D472-40C7-1A79-0501-4F9CF5E29BAA}" name="Source">
       <FILE id="v7W1nU" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="lNDBsF" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>

@@ -1,2 +1,2 @@
-# Nostation
-The free and open source music notation and audio workstation!
+# Melodius
+The free and open source notation and audio workstation!

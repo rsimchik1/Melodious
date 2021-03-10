@@ -10,11 +10,11 @@
 #include "MainComponent.h"
 
 //==============================================================================
-class NostationApplication  : public juce::JUCEApplication
+class MelodiusApplication  : public juce::JUCEApplication
 {
 public:
     //==============================================================================
-    NostationApplication() {}
+    MelodiusApplication() {}
 
     const juce::String getApplicationName() override       { return ProjectInfo::projectName; }
     const juce::String getApplicationVersion() override    { return ProjectInfo::versionString; }
@@ -102,4 +102,4 @@ private:
 
 //==============================================================================
 // This macro generates the main() routine that launches the app.
-START_JUCE_APPLICATION (NostationApplication)
+START_JUCE_APPLICATION (MelodiusApplication)
