@@ -5,6 +5,8 @@
 
 /**
  * Interior or root node in a Channel tree.
+ * 
+ * @authors Richard Simchik
  */
 class NodeChannel : public Channel
 {
@@ -18,8 +20,8 @@ public:
 	 */
 	NodeChannel(Channel* parent = nullptr);
 	~NodeChannel();
-	AudioBuffer processFrames(int numFrames) override;
 	bool hasChild(const Channel* childToFind) override;
+	AudioBuffer processFrames(int numFrames, const Timeline& relativeTime) override;
 protected:
 	void addChild(Channel* newChild) override;
 	void removeChild(Channel* childToRemove) override;

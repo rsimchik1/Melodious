@@ -7,6 +7,10 @@
 #include "../Source/NodeChannel.cpp"
 #include "../Source/LeafChannel.h"
 #include "../Source/LeafChannel.cpp"
+#include "../Source/Timeline.h"
+#include "../Source/Timeline.cpp"
+#include "../Source/Track.h"
+#include "../Source/Track.cpp"
 
 #include "../Source/Exceptions/InvalidChannelTreeException.h"
 #include "../Source/Exceptions/InvalidArgumentException.h"
@@ -70,6 +74,11 @@ BOOST_AUTO_TEST_CASE(ChannelParentChildTest)
 	BOOST_CHECK(!invalidChild2.hasParent());
 	BOOST_CHECK(invalidChild2.getParent() == nullptr);
 	BOOST_CHECK(!validParent.hasChild(&invalidChild2));
+	
+	BOOST_CHECK_THROW(validParent.setParent(&validParent),
+		InvalidChannelTreeException);
+	BOOST_CHECK(validParent.getParent() != &validParent);
+	BOOST_CHECK(!validParent.hasChild(&validParent));
 
 	validChild1.removeParent();
 	BOOST_CHECK(!validChild1.hasParent());
@@ -89,8 +98,9 @@ BOOST_AUTO_TEST_CASE(ChannelParentChildTest)
 BOOST_AUTO_TEST_CASE(ChannelProcessFramesTest)
 {
 	const int numToProcess = 512;
+	auto testTimeline = Timeline();
 	auto rootNode = NodeChannel();
-	auto bufferOut = rootNode.processFrames(numToProcess);
+	auto bufferOut = rootNode.processFrames(numToProcess, testTimeline);
 	
 	BOOST_CHECK_EQUAL(bufferOut.getNumFrames(), numToProcess);
 	for (auto i = 0; i < numToProcess; i++)
@@ -99,14 +109,14 @@ BOOST_AUTO_TEST_CASE(ChannelProcessFramesTest)
 
 	auto interiorNode = NodeChannel(&rootNode);
 	auto leafNode = LeafChannel(&interiorNode);
-	bufferOut = rootNode.processFrames(numToProcess);
+	bufferOut = rootNode.processFrames(numToProcess, testTimeline);
 
 	BOOST_CHECK_EQUAL(bufferOut.getNumFrames(), numToProcess);
 	for (auto i = 0; i < numToProcess; i++)
 		for (auto j = 0; j < bufferOut.getNumChannels(); j++)
 			BOOST_CHECK_EQUAL(bufferOut.readSampleAt(i, j), 0.0f);
 
-	bufferOut = leafNode.processFrames(numToProcess);
+	bufferOut = leafNode.processFrames(numToProcess, testTimeline);
 
 	BOOST_CHECK_EQUAL(bufferOut.getNumFrames(), numToProcess);
 	for (auto i = 0; i < numToProcess; i++)

@@ -3,7 +3,7 @@
 
 LeafChannel::LeafChannel(Channel* parent)
 {
-	// TODO parameterize audioSource when Track class is more fleshed out
+	// TODO parameterize audioSource when Track class is more fleshed out?
 	audioSource = new Track();
 	try
 	{
@@ -21,7 +21,7 @@ LeafChannel::~LeafChannel()
 	delete audioSource;
 }
 
-AudioBuffer LeafChannel::processFrames(int numFrames)
+AudioBuffer LeafChannel::processFrames(int numFrames, const Timeline &referenceTimeline)
 {
 	// TODO get frames from audioSource
 	return AudioBuffer(numFrames, 2);

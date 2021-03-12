@@ -24,13 +24,13 @@ NodeChannel::~NodeChannel()
 	removeParent();
 }
 
-AudioBuffer NodeChannel::processFrames(int numFrames)
+AudioBuffer NodeChannel::processFrames(int numFrames, const Timeline& referenceTimeline)
 {
 	// TODO change numChannels below when implementing mono/stereo channels.
 	AudioBuffer toReturn(numFrames, 2);
 	for(auto *child : children)
 	{
-		toReturn.addBuffer(child->processFrames(numFrames));
+		toReturn.addBuffer(child->processFrames(numFrames, referenceTimeline));
 	}
 	return toReturn;
 }

@@ -6,6 +6,8 @@
  * Leaf node in a Channel tree, which takes input from a single Track instead of
  * multiple Channels. Attempts to modify this node's children will raise an
  * exception.
+ * 
+ * @authors Richard Simchik
  */
 class LeafChannel : public Channel
 {
@@ -19,8 +21,8 @@ public:
 	 */
 	LeafChannel(Channel* parent = nullptr);
 	~LeafChannel();
-	AudioBuffer processFrames(int numFrames) override;
 	bool hasChild(const Channel* childToFind) override;
+	AudioBuffer processFrames(int numFrames, const Timeline& relativeTime) override;
 protected:
 	void addChild(Channel* newChild) override;
 	void removeChild(Channel* childToRemove) override;

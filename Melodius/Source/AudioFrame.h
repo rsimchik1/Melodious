@@ -4,6 +4,8 @@
 
 /**
  * Container for concurrent audio samples.
+ *
+ * @authors Richard Simchik
  */
 class AudioFrame
 {

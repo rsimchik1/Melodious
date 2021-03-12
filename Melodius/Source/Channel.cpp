@@ -5,6 +5,9 @@
 
 void Channel::setParent(Channel *newParent)
 {
+	if (newParent == this)
+		throw InvalidChannelTreeException();
+	
 	if (newParent == parent)
 		return;
 

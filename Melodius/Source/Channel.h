@@ -1,17 +1,20 @@
 #pragma once
 #include "AudioBuffer.h"
+#include "AudioNode.h"
 
-
+class Timeline;
 /**
  * Interface for a Channel, which is a node in a tree structure for processing
  * and combining audio tracks.
  *
  * TODO allow channel to have additional outputs ("sends")
- * TODO add modifiers for gain, pan, mute, and solo
+ * TODO add modifiers for gain, pan, mute, and solo - encapsulate?
  * TODO support toggleable mono and stereo channels
  * TODO add effects processing chain ("inserts")
+ * 
+ * @authors Richard Simchik
  */
-class Channel
+class Channel : AudioNode
 {
 public:
 	/**
@@ -19,19 +22,36 @@ public:
 	 * Children are processed depth-first.
 	 *
 	 * @param numFrames The number of frames to process.
+	 * @param relativeTime The timeline to reference when reading frames.
 	 * @return The processed frames.
 	 */
-	virtual AudioBuffer processFrames(int numFrames) = 0;
+	AudioBuffer processFrames(int numFrames, const Timeline &relativeTime) override = 0;
+
+	/**
+	 * Search this Channel's children for the given Channel.
+	 *
+	 * @param childToFind Pointer to the Channel to be found.
+	 * @return True if childToFind is a child of this Channel, false otherwise.
+	 */
+	virtual bool hasChild(const Channel* childToFind) = 0;
 	
 	/**
 	 * Set this node's parent to the given node. If this node already has a
 	 * parent, it will be replaced. If input is null, this node will be detached
 	 * from the parent. Parent node will have its children updated.
 	 *
-	 * @throw InvalidChannelTreeException If the parent channel is a leaf node.
+	 * @throw InvalidChannelTreeException If the parent channel is a leaf node,
+	 * or the parent channel is this channel.
 	 * @param newParent The new parent node of this Channel.
 	 */
 	void setParent(Channel *newParent);
+
+	/**
+	 * Get the pointer to this Channel's parent.
+	 *
+	 * @return Parent Channel's pointer, or null if there is none.
+	 */
+	Channel* getParent();
 
 	/**
 	 * Detach this node from parent. Same as calling setParent(nullptr). If
@@ -43,26 +63,11 @@ public:
 	void removeParent();
 
 	/**
-	 * Get the pointer to this Channel's parent.
-	 *
-	 * @return Parent Channel's pointer, or null if there is none.
-	 */
-	Channel* getParent();
-
-	/**
 	 * Determine whether this Channel has a parent.
 	 *
 	 * @return True if node has a parent, false otherwise.
 	 */
 	bool hasParent();
-
-	/**
-	 * Search this Channel's children for the given Channel.
-	 *
-	 * @param childToFind Pointer to the Channel to be found.
-	 * @return True if childToFind is a child of this Channel, false otherwise.
-	 */
-	virtual bool hasChild(const Channel* childToFind) = 0;
 protected:
 	/**
 	 * Add the given node to this node's children.
