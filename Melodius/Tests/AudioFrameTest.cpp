@@ -1,11 +1,9 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
-
 #include "../Source/AudioFrame.h"
-#include "../Source/AudioFrame.cpp"
-#include "../Source/Exceptions/IndexOutOfBoundsException.h"
 #include "../Source/Exceptions/InvalidFrameException.h"
 #include "../Source/Exceptions/InvalidSampleException.h"
+#include "../Source/Exceptions/IndexOutOfBoundsException.h"
 
 BOOST_AUTO_TEST_SUITE(AudioFrameTest);
 

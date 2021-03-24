@@ -1,19 +1,9 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
-
 #include "../Source/Channel.h"
-#include "../Source/Channel.cpp"
 #include "../Source/NodeChannel.h"
-#include "../Source/NodeChannel.cpp"
 #include "../Source/LeafChannel.h"
-#include "../Source/LeafChannel.cpp"
-#include "../Source/Timeline.h"
-#include "../Source/Timeline.cpp"
-#include "../Source/Track.h"
-#include "../Source/Track.cpp"
-
 #include "../Source/Exceptions/InvalidChannelTreeException.h"
-#include "../Source/Exceptions/InvalidArgumentException.h"
 
 BOOST_AUTO_TEST_SUITE(ChannelTest);
 
