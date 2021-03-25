@@ -1,5 +1,8 @@
 #include "MainComponent.h"
 
+#include "LeafChannel.h"
+#include "OscTrack.h"
+
 //==============================================================================
 MainComponent::MainComponent()
 {
@@ -21,6 +24,22 @@ MainComponent::MainComponent()
     }
 
     DBG("Hello, World!");
+
+    mixer.createAudioChannel();
+    mixer.createAudioChannel();
+    mixer.createAudioChannel();
+    mixer.createBusChannel();
+    mixer.connectChannels(0, 3);
+    mixer.connectChannels(1, 3);
+    mixer.connectChannels(2, 3);
+
+    const float baseFreq = 350.0;
+    dynamic_cast<LeafChannel *>(mixer.getChannelAt(0))->setAudioSource(
+        new OscTrack(baseFreq, 0.25));
+    dynamic_cast<LeafChannel *>(mixer.getChannelAt(1))->setAudioSource(
+        new OscTrack(baseFreq*3/2.0, 0.25));
+    dynamic_cast<LeafChannel *>(mixer.getChannelAt(2))->setAudioSource(
+        new OscTrack(baseFreq*5/4.0, 0.25));
 }
 
 MainComponent::~MainComponent()
@@ -41,20 +60,20 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     // For more details, see the help for AudioProcessor::prepareToPlay()
 
     this->sampleRate = sampleRate;
+    timeline = Timeline(sampleRate);
 }
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
 {
     // Your audio-processing code goes here!
-    float** audioIOChannels = bufferToFill.buffer->getArrayOfWritePointers();
+    auto buffer = mixer.processFrames(bufferToFill.numSamples, timeline);
 	for (int sample = 0; sample < bufferToFill.numSamples; sample++)
 	{
 		for (int channel = 0; channel < bufferToFill.buffer->getNumChannels(); channel++)
 		{
-            audioIOChannels[channel][sample] = std::sin(sinePhase) * 0.5;
+            bufferToFill.buffer->setSample(channel, sample,
+                buffer.readSampleAt(sample, channel));
 		}
-        sinePhase += juce::MathConstants<float>::twoPi * (440.0 / sampleRate);
-        if (sinePhase >= juce::MathConstants<float>::twoPi) sinePhase -= juce::MathConstants<float>::twoPi;
 	}
 }
 

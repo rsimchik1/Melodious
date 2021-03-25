@@ -21,10 +21,16 @@ LeafChannel::~LeafChannel()
 	delete audioSource;
 }
 
-AudioBuffer LeafChannel::processFrames(int numFrames, const Timeline &referenceTimeline)
+AudioBuffer LeafChannel::processFrames(int numFrames, const Timeline &relativeTime)
 {
 	// TODO get frames from audioSource
-	return AudioBuffer(numFrames, 2);
+	return audioSource->processFrames(numFrames, relativeTime);
+}
+
+void LeafChannel::setAudioSource(Track* sourceTrack)
+{
+	delete audioSource;
+	audioSource = sourceTrack;
 }
 
 bool LeafChannel::hasChild(const Channel* childToFind)

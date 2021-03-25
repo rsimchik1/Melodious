@@ -23,6 +23,7 @@ public:
 	~LeafChannel();
 	bool hasChild(const Channel* childToFind) override;
 	AudioBuffer processFrames(int numFrames, const Timeline& relativeTime) override;
+	void setAudioSource(Track* sourceTrack);
 protected:
 	void addChild(Channel* newChild) override;
 	void removeChild(Channel* childToRemove) override;

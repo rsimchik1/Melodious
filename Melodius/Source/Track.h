@@ -1,7 +1,7 @@
 #pragma once
 #include "AudioBuffer.h"
 #include "AudioNode.h"
-#include "Clip.h"
+#include "AudioClip.h"
 #include "ClipReader.h"
 
 /**
@@ -29,6 +29,6 @@ public:
 
 	AudioBuffer processFrames(int numFrames, const Timeline& relativeTime) override;
 private:
-	std::vector<Clip*> clips;
+	std::vector<AudioClip*> clips;
 	ClipReader reader;
 };

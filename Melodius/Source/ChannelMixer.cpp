@@ -89,6 +89,13 @@ void ChannelMixer::connectToMasterOutput(int sourceIndex)
 	catch (const std::exception& e) { throw e; }
 }
 
+Channel *ChannelMixer::getChannelAt(int index)
+{
+	if (!isIndexInRange(index)) throw IndexOutOfBoundsException();
+
+	return channels[index];
+}
+
 void ChannelMixer::insertChannel(int index, Channel* channel)
 {
 	if (index > 0 && index > channels.size()) 

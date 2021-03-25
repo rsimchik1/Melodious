@@ -2,6 +2,8 @@
 
 #include <JuceHeader.h>
 
+#include "ChannelMixer.h"
+
 //==============================================================================
 /*
     This component lives inside our window, and this is where you should put all
@@ -27,8 +29,9 @@ private:
     //==============================================================================
     // Your private member variables go here...
 
-    float sinePhase = 0;    // TODO delete this when development starts
     unsigned int sampleRate;
+    ChannelMixer mixer;
+    Timeline timeline;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

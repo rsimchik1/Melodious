@@ -112,6 +112,11 @@ public:
 	 * @param sourceIndex The index of the source channel.
 	 */
 	void connectToMasterOutput(int sourceIndex);
+
+	/**
+	 * Get the channel at the specified index (WILL LIKELY BE REMOVED).
+	 */
+	Channel *getChannelAt(int index);
 private:
 	std::vector<Channel*> channels;
 	NodeChannel* rootChannel;

@@ -28,9 +28,9 @@ AudioBuffer NodeChannel::processFrames(int numFrames, const Timeline& referenceT
 {
 	// TODO change numChannels below when implementing mono/stereo channels.
 	AudioBuffer toReturn(numFrames, 2);
-	for(auto *child : children)
+	for(auto i = 0; i < children.size(); i++)
 	{
-		toReturn.addBuffer(child->processFrames(numFrames, referenceTimeline));
+		toReturn.addBuffer(children[i]->processFrames(numFrames, referenceTimeline));
 	}
 	return toReturn;
 }
