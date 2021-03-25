@@ -83,6 +83,9 @@ BOOST_AUTO_TEST_CASE(ChannelParentChildTest)
 	BOOST_CHECK(validChild2.hasParent());
 	BOOST_CHECK(validChild2.getParent() == &validParent2);
 	BOOST_CHECK(validParent2.hasChild(&validChild2));
+	BOOST_CHECK(!validParent.hasChild(&validChild2));
+	BOOST_CHECK_THROW(validParent.setParent(&validParent2), 
+		InvalidChannelTreeException);
 }
 
 BOOST_AUTO_TEST_CASE(ChannelProcessFramesTest)

@@ -41,7 +41,8 @@ public:
 	 * from the parent. Parent node will have its children updated.
 	 *
 	 * @throw InvalidChannelTreeException If the parent channel is a leaf node,
-	 * or the parent channel is this channel.
+	 * if the parent channel is this channel, or if the parent channel is a
+	 * child of this channel.
 	 * @param newParent The new parent node of this Channel.
 	 */
 	void setParent(Channel *newParent);

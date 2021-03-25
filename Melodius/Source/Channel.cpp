@@ -33,8 +33,13 @@ void Channel::setParent(Channel *newParent)
 			}
 		}
 	}
+	else if (this->hasChild(newParent))
+	{
+		throw InvalidChannelTreeException();
+	}
 	else
 	{
+		if (parent) parent->removeChild(this);
 		try
 		{
 			newParent->addChild(this);

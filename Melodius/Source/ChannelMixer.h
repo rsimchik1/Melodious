@@ -1,12 +1,12 @@
 #pragma once
 #include "AudioBuffer.h"
 #include "Channel.h"
+#include "NodeChannel.h"
 #include "AudioNode.h"
 
-class NodeChannel;
 /**
  * Class that allows client code to sort and access channels by index and
- * modify a channel tree via an abstract interface.
+ * modify a channel tree via an abstract interface. Channels are zero-indexed.
  *
  * TODO find a replacement for the "create...Channel()" methods
  * 
@@ -23,7 +23,7 @@ public:
 	/**
 	 * Delete this ChannelMixer. DELETES ALL ASSOCIATED CHANNELS.
 	 */
-	~ChannelMixer();
+	~ChannelMixer() override;
 
 	/**
 	 * Read the given number of frames from the master output channel (and all
@@ -40,7 +40,7 @@ public:
 	 *
 	 * @return The number of channels.
 	 */
-	int getNumChannels();
+	int getNumChannels() const;
 
 	/**
 	 * Create a new audio source channel at the specified index, shifting
@@ -115,4 +115,6 @@ public:
 private:
 	std::vector<Channel*> channels;
 	NodeChannel* rootChannel;
+	void insertChannel(int index, Channel *channel);
+	bool isIndexInRange(int index);
 };

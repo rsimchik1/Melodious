@@ -3,7 +3,7 @@
 #include "Timeline.h"
 
 /**
- * Interface for any class that handles audio data with respect to time.
+ * Interface for any class that processes streams of audio data.
  */
 class AudioNode
 {
