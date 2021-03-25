@@ -33,7 +33,7 @@ MainComponent::MainComponent()
     mixer.connectChannels(1, 3);
     mixer.connectChannels(2, 3);
 
-    const float baseFreq = 350.0;
+    const float baseFreq = 260.0;
     dynamic_cast<LeafChannel *>(mixer.getChannelAt(0))->setAudioSource(
         new OscTrack(baseFreq, 0.25));
     dynamic_cast<LeafChannel *>(mixer.getChannelAt(1))->setAudioSource(
@@ -75,6 +75,7 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
                 buffer.readSampleAt(sample, channel));
 		}
 	}
+    timeline.shiftPlaybackHead(bufferToFill.numSamples);
 }
 
 void MainComponent::releaseResources()
