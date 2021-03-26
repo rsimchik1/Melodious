@@ -3,8 +3,7 @@
 
 LeafChannel::LeafChannel(Channel* parent)
 {
-	// TODO parameterize audioSource when Track class is more fleshed out?
-	audioSource = new Track();
+	audioSource = nullptr;
 	try
 	{
 		setParent(parent);
@@ -23,14 +22,13 @@ LeafChannel::~LeafChannel()
 
 AudioBuffer LeafChannel::processFrames(int numFrames, const Timeline &relativeTime)
 {
-	// TODO get frames from audioSource
 	return audioSource->processFrames(numFrames, relativeTime);
 }
 
-void LeafChannel::setAudioSource(Track* sourceTrack)
+void LeafChannel::setAudioSource(AudioNode *audioSource)
 {
-	delete audioSource;
-	audioSource = sourceTrack;
+	delete this->audioSource;
+	this->audioSource = audioSource;
 }
 
 bool LeafChannel::hasChild(const Channel* childToFind)

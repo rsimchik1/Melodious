@@ -14,7 +14,7 @@ class Timeline;
  * 
  * @authors Richard Simchik
  */
-class Channel : AudioNode
+class Channel : public AudioNode
 {
 public:
 	/**

@@ -1,7 +1,8 @@
 #include "MainComponent.h"
 
 #include "LeafChannel.h"
-#include "OscTrack.h"
+#include "OscClip.h"
+#include "OscClipReader.h"
 
 //==============================================================================
 MainComponent::MainComponent()
@@ -33,13 +34,31 @@ MainComponent::MainComponent()
     mixer.connectChannels(1, 3);
     mixer.connectChannels(2, 3);
 
+    auto reader1 = new OscClipReader();
+    auto reader2 = new OscClipReader();
+    auto reader3 = new OscClipReader();
+    auto track1 = new Track<OscClip>(reader1);
+    auto track2 = new Track<OscClip>(reader2);
+    auto track3 = new Track<OscClip>(reader3);
+    
     const float baseFreq = 260.0;
-    dynamic_cast<LeafChannel *>(mixer.getChannelAt(0))->setAudioSource(
-        new OscTrack(baseFreq, 0.25));
-    dynamic_cast<LeafChannel *>(mixer.getChannelAt(1))->setAudioSource(
-        new OscTrack(baseFreq*3/2.0, 0.25));
-    dynamic_cast<LeafChannel *>(mixer.getChannelAt(2))->setAudioSource(
-        new OscTrack(baseFreq*5/4.0, 0.25));
+    auto *clip1 = new OscClip(baseFreq, 0.25);
+    auto *clip2 = new OscClip(baseFreq * 3.0/2, 0.25);
+    auto *clip3 = new OscClip(baseFreq * 5.0/4, 0.25);
+    auto *clip4 = new OscClip(baseFreq * 2, 0.25);
+    clip1->setStartEndFrames(0, sampleRate * 2);
+    clip2->setStartEndFrames(sampleRate * 1, sampleRate * 8);
+    clip3->setStartEndFrames(sampleRate * 2, sampleRate * 10);
+    clip4->setStartEndFrames(sampleRate * 2, sampleRate * 12);
+
+    track1->insertClip(clip1);
+    track2->insertClip(clip2);
+    track3->insertClip(clip3);
+    track1->insertClip(clip4);
+
+    dynamic_cast<LeafChannel *>(mixer.getChannelAt(0))->setAudioSource(track1);
+    dynamic_cast<LeafChannel *>(mixer.getChannelAt(1))->setAudioSource(track2);
+    dynamic_cast<LeafChannel *>(mixer.getChannelAt(2))->setAudioSource(track3);
 }
 
 MainComponent::~MainComponent()

@@ -1,9 +1,8 @@
 #pragma once
 #include <iostream>
 
-class AudioClip
+#include "Clip.h"
+
+class AudioClip : public Clip
 {
-public:
-	AudioClip(std::string filePath);
-	~AudioClip();
 };

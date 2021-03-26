@@ -13,9 +13,8 @@ class LeafChannel : public Channel
 {
 public:
 	/**
-	 * Create a new LeafChannel. Automatically create a new track for this
-	 * channel (will likely change in the future).
-	 *
+	 * Create a new LeafChannel.
+	 * 
 	 * @throw InvalidChannelTreeException If the passed parent is a LeafChannel.
 	 * @param parent Initial parent for this channel (optional).
 	 */
@@ -23,10 +22,10 @@ public:
 	~LeafChannel();
 	bool hasChild(const Channel* childToFind) override;
 	AudioBuffer processFrames(int numFrames, const Timeline& relativeTime) override;
-	void setAudioSource(Track* sourceTrack);
+	void setAudioSource(AudioNode* audioSource);
 protected:
 	void addChild(Channel* newChild) override;
 	void removeChild(Channel* childToRemove) override;
 private:
-	Track* audioSource;
+	AudioNode* audioSource;
 };

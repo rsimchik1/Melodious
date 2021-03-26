@@ -12,7 +12,7 @@
  * 
  * @authors Richard Simchik
  */
-class ChannelMixer : AudioNode
+class ChannelMixer : public AudioNode
 {
 public:
 	/**
