@@ -3,6 +3,7 @@
 #include <JuceHeader.h>
 
 #include "ChannelMixer.h"
+#include "View/ArrangeView.h"
 
 //==============================================================================
 /*
@@ -32,6 +33,8 @@ private:
     unsigned int sampleRate;
     ChannelMixer mixer;
     Timeline timeline;
+
+    ArrangeView arrangeView;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

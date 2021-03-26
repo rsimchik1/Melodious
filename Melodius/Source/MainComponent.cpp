@@ -4,9 +4,18 @@
 #include "OscClip.h"
 #include "OscClipReader.h"
 
+
+const float starts[4] = { 0, 1, 2, 2.5 };
+const float ends[4] = { 2, 8, 10, 12 };
 //==============================================================================
 MainComponent::MainComponent()
 {
+    for (auto i = 0; i < 4; i++)
+    {
+        arrangeView.starts[i] = starts[i];
+        arrangeView.ends[i] = ends[i];
+    }
+    addAndMakeVisible(arrangeView);
     // Make sure you set the size of the component after
     // you add any child components.
     setSize (800, 600);
@@ -23,8 +32,6 @@ MainComponent::MainComponent()
         // Specify the number of input and output channels that we want to open
         setAudioChannels (2, 2);
     }
-
-    DBG("Hello, World!");
 
     mixer.createAudioChannel();
     mixer.createAudioChannel();
@@ -46,10 +53,10 @@ MainComponent::MainComponent()
     auto *clip2 = new OscClip(baseFreq * 3.0/2, 0.25);
     auto *clip3 = new OscClip(baseFreq * 5.0/4, 0.25);
     auto *clip4 = new OscClip(baseFreq * 2, 0.25);
-    clip1->setStartEndFrames(0, sampleRate * 2);
-    clip2->setStartEndFrames(sampleRate * 1, sampleRate * 8);
-    clip3->setStartEndFrames(sampleRate * 2, sampleRate * 10);
-    clip4->setStartEndFrames(sampleRate * 2, sampleRate * 12);
+    clip1->setStartEndFrames(sampleRate * starts[0], sampleRate * ends[0]);
+    clip2->setStartEndFrames(sampleRate * starts[1], sampleRate * ends[1]);
+    clip3->setStartEndFrames(sampleRate * starts[2], sampleRate * ends[2]);
+    clip4->setStartEndFrames(sampleRate * starts[3], sampleRate * ends[3]);
 
     track1->insertClip(clip1);
     track2->insertClip(clip2);
@@ -80,6 +87,7 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
 
     this->sampleRate = sampleRate;
     timeline = Timeline(sampleRate);
+    arrangeView.setSampleRate(sampleRate);
 }
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
@@ -94,6 +102,7 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
                 buffer.readSampleAt(sample, channel));
 		}
 	}
+    arrangeView.setTime(timeline.getPlaybackHead());
     timeline.shiftPlaybackHead(bufferToFill.numSamples);
 }
 
@@ -108,15 +117,9 @@ void MainComponent::releaseResources()
 //==============================================================================
 void MainComponent::paint (juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-
-    // You can add your drawing code here!
 }
 
 void MainComponent::resized()
 {
-    // This is called when the MainContentComponent is resized.
-    // If you add any child components, this is where you should
-    // update their positions.
+    arrangeView.setBounds(getLocalBounds());
 }
