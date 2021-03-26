@@ -2,7 +2,7 @@
 
 
 #include "AudioClip.h"
-#include "Exceptions/InvalidArgumentException.h"
+#include "../Exceptions/InvalidArgumentException.h"
 
 template <typename T>
 Track<T>::Track(ClipReader<T> *reader)

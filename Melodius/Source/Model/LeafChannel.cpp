@@ -1,5 +1,5 @@
 #include "LeafChannel.h"
-#include "Exceptions/InvalidChannelTreeException.h"
+#include "../Exceptions/InvalidChannelTreeException.h"
 
 LeafChannel::LeafChannel(Channel* parent)
 {

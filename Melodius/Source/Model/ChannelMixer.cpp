@@ -1,8 +1,8 @@
 #include "ChannelMixer.h"
 
 #include "LeafChannel.h"
-#include "Exceptions/IndexOutOfBoundsException.h"
-#include "Exceptions/InvalidChannelTreeException.h"
+#include "../Exceptions/IndexOutOfBoundsException.h"
+#include "../Exceptions/InvalidChannelTreeException.h"
 
 ChannelMixer::ChannelMixer()
 {

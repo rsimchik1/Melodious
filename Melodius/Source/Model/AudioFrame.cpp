@@ -1,7 +1,7 @@
 #include "AudioFrame.h"
-#include "Exceptions/IndexOutOfBoundsException.h"
-#include "Exceptions/InvalidFrameException.h"
-#include "Exceptions/InvalidSampleException.h"
+#include "../Exceptions/IndexOutOfBoundsException.h"
+#include "../Exceptions/InvalidFrameException.h"
+#include "../Exceptions/InvalidSampleException.h"
 
 AudioFrame::AudioFrame(int numChannels)
 {

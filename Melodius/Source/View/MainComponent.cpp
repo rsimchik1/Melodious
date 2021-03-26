@@ -1,8 +1,8 @@
 #include "MainComponent.h"
 
-#include "LeafChannel.h"
-#include "OscClip.h"
-#include "OscClipReader.h"
+#include "../Model/LeafChannel.h"
+#include "../Model/OscClip.h"
+#include "../Model/OscClipReader.h"
 
 
 const float starts[4] = { 0, 1, 2, 2.5 };

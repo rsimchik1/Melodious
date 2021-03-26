@@ -1,7 +1,7 @@
 #include "NodeChannel.h"
 
-#include "Exceptions/InvalidArgumentException.h"
-#include "Exceptions/InvalidChannelTreeException.h"
+#include "../Exceptions/InvalidArgumentException.h"
+#include "../Exceptions/InvalidChannelTreeException.h"
 
 NodeChannel::NodeChannel(Channel* parent)
 {

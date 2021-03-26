@@ -7,7 +7,7 @@
 */
 
 #include <JuceHeader.h>
-#include "MainComponent.h"
+#include "View/MainComponent.h"
 
 //==============================================================================
 class MelodiusApplication  : public juce::JUCEApplication

@@ -1,8 +1,8 @@
 #include "Timeline.h"
 
 
-#include "Exceptions/IndexOutOfBoundsException.h"
-#include "Exceptions/InvalidArgumentException.h"
+#include "../Exceptions/IndexOutOfBoundsException.h"
+#include "../Exceptions/InvalidArgumentException.h"
 
 Timeline::Timeline(int sampleRate)
 {

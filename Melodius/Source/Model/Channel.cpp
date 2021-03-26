@@ -1,7 +1,7 @@
 #include "Channel.h"
 
-#include "Exceptions/InvalidArgumentException.h"
-#include "Exceptions/InvalidChannelTreeException.h"
+#include "../Exceptions/InvalidArgumentException.h"
+#include "../Exceptions/InvalidChannelTreeException.h"
 
 void Channel::setParent(Channel *newParent)
 {

@@ -2,8 +2,8 @@
 
 #include <JuceHeader.h>
 
-#include "ChannelMixer.h"
-#include "View/ArrangeView.h"
+#include "../Model/ChannelMixer.h"
+#include "ArrangeView.h"
 
 //==============================================================================
 /*

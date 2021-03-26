@@ -4,7 +4,7 @@
 
 #include "AudioClip.h"
 #include "OscClip.h"
-#include "Exceptions/InvalidArgumentException.h"
+#include "../Exceptions/InvalidArgumentException.h"
 
 template <typename T>
 void ClipReader<T>::attachToClip(T* clip)

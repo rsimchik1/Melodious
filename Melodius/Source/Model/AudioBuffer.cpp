@@ -1,9 +1,9 @@
 #include "AudioBuffer.h"
-#include "Exceptions/InvalidFrameException.h"
-#include "Exceptions/InvalidBufferException.h"
-#include "Exceptions/InvalidSampleException.h"
-#include "Exceptions/IndexOutOfBoundsException.h"
-#include "Exceptions/InvalidArgumentException.h"
+#include "../Exceptions/InvalidFrameException.h"
+#include "../Exceptions/InvalidBufferException.h"
+#include "../Exceptions/InvalidSampleException.h"
+#include "../Exceptions/IndexOutOfBoundsException.h"
+#include "../Exceptions/InvalidArgumentException.h"
 
 AudioBuffer::AudioBuffer(int numFrames, int numChannels)
 {
