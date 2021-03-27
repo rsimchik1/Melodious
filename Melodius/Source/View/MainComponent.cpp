@@ -10,15 +10,15 @@ const float ends[4] = { 2, 8, 10, 12 };
 //==============================================================================
 MainComponent::MainComponent()
 {
-    for (auto i = 0; i < 4; i++)
-    {
-        arrangeView.starts[i] = starts[i];
-        arrangeView.ends[i] = ends[i];
-    }
     addAndMakeVisible(arrangeView);
     // Make sure you set the size of the component after
     // you add any child components.
     setSize (800, 600);
+    arrangeView.setColour(ArrangeView::BACKGROUND_COLOR, juce::Colour(0xff030b47));
+    arrangeView.setColour(ArrangeView::BORDER_LIGHT_COLOR, juce::Colour(0xff737795));
+    arrangeView.setColour(ArrangeView::BORDER_HEAVY_COLOR, juce::Colours::white);
+    arrangeView.setColour(ArrangeView::PLAYHEAD_COLOR, juce::Colours::white);
+    arrangeView.setColour(ArrangeView::TEXT_COLOR, juce::Colours::white);
 
     // Some platforms require permissions to open input channels so request that here
     if (juce::RuntimePermissions::isRequired (juce::RuntimePermissions::recordAudio)
@@ -47,6 +47,10 @@ MainComponent::MainComponent()
     auto track1 = new Track<OscClip>(reader1);
     auto track2 = new Track<OscClip>(reader2);
     auto track3 = new Track<OscClip>(reader3);
+
+    auto trackView1 = new TrackView("Track 1", sampleRate);
+    auto trackView2 = new TrackView("Track 2", sampleRate);
+    auto trackView3 = new TrackView("Track 3", sampleRate);
     
     const float baseFreq = 260.0;
     auto *clip1 = new OscClip(baseFreq, 0.25);
@@ -58,14 +62,32 @@ MainComponent::MainComponent()
     clip3->setStartEndFrames(sampleRate * starts[2], sampleRate * ends[2]);
     clip4->setStartEndFrames(sampleRate * starts[3], sampleRate * ends[3]);
 
+    auto* clipView1 = new ClipView(clip1->getStartFrame(), clip1->getEndFrame());
+    auto* clipView2 = new ClipView(clip2->getStartFrame(), clip2->getEndFrame());
+    auto* clipView3 = new ClipView(clip3->getStartFrame(), clip3->getEndFrame());
+    auto* clipView4 = new ClipView(clip4->getStartFrame(), clip4->getEndFrame());
+
+    clipView1->setColor(juce::Colour(0xff2ec8c8));
+    clipView2->setColor(juce::Colour(0xff7e6cef));
+    clipView3->setColor(juce::Colour(0xfffc09e4));
+    clipView4->setColor(juce::Colour(0xff2ec8c8));
+
     track1->insertClip(clip1);
+    trackView1->addClip(clipView1);
     track2->insertClip(clip2);
+    trackView2->addClip(clipView2);
     track3->insertClip(clip3);
+    trackView3->addClip(clipView3);
     track1->insertClip(clip4);
+    trackView1->addClip(clipView4);
 
     dynamic_cast<LeafChannel *>(mixer.getChannelAt(0))->setAudioSource(track1);
     dynamic_cast<LeafChannel *>(mixer.getChannelAt(1))->setAudioSource(track2);
     dynamic_cast<LeafChannel *>(mixer.getChannelAt(2))->setAudioSource(track3);
+
+    arrangeView.addTrack(trackView1);
+    arrangeView.addTrack(trackView2);
+    arrangeView.addTrack(trackView3);
 }
 
 MainComponent::~MainComponent()
