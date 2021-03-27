@@ -13,6 +13,8 @@
 class Clip
 {
 public:
+	Clip();
+	Clip(const Clip& toCopy);
 	void setStartEndFrames(int32_t newStart, int32_t newEnd);
 	int32_t getStartFrame();
 	int32_t getEndFrame();

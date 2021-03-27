@@ -19,6 +19,13 @@ Track<T>::~Track()
 }
 
 template <typename T>
+Track<T>::Track(const Track& toCopy)
+{
+	std::copy(toCopy.clips.begin(), toCopy.clips.end(), clips.begin());
+	this->reader = toCopy.reader;
+}
+
+template <typename T>
 void Track<T>::insertClip(T* clip)
 {
 	clips.push_back(clip);

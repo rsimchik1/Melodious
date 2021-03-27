@@ -1,6 +1,6 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
-#include "../Source/AudioBuffer.h"
+#include "../Source/Model/AudioBuffer.h"
 #include "../Source/Exceptions/InvalidBufferException.h"
 #include "../Source/Exceptions/InvalidFrameException.h"
 #include "../Source/Exceptions/InvalidSampleException.h"

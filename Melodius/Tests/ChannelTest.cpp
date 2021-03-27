@@ -1,8 +1,8 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
-#include "../Source/Channel.h"
-#include "../Source/NodeChannel.h"
-#include "../Source/LeafChannel.h"
+#include "../Source/Model/Channel.h"
+#include "../Source/Model/NodeChannel.h"
+#include "../Source/Model/LeafChannel.h"
 #include "../Source/Exceptions/InvalidChannelTreeException.h"
 
 BOOST_AUTO_TEST_SUITE(ChannelTest);

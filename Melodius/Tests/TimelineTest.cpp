@@ -1,7 +1,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include "../Source/Timeline.h"
+#include "../Source/Model/Timeline.h"
 #include "../Source/Exceptions/IndexOutOfBoundsException.h"
 #include "../Source/Exceptions/InvalidArgumentException.h"
 
