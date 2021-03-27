@@ -41,6 +41,17 @@ public:
 	 * @param offset The number of samples to shift.
 	 */
 	void shiftPlaybackHead(int32_t offset);
+
+	/**
+	 * Find the number of samples per beat at the given tempo.
+	 *
+	 * @throw InvalidArgumentException If the tempo is invalid.
+	 * @param beatsPerMinute The tempo of the music.
+	 *		  { 1 <= beatsPerMinute <= 500 }
+	 * @return The number of samples in every beat. Represented as a float to
+	 * maintain precision.
+	 */
+	float getSamplesPerBeat(float beatsPerMinute);
 private:
 	int sampleRate;
 	uint32_t playbackLocation;

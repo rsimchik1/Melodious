@@ -34,4 +34,34 @@ BOOST_AUTO_TEST_SUITE(TimelineTest);
 			IndexOutOfBoundsException);
 	}
 
+	BOOST_AUTO_TEST_CASE(TimelineSamplesPerBeatTest)
+	{
+		auto srate1 = 44100;
+		auto srate2 = 48000;
+		
+		auto timeline1 = Timeline(srate1);
+		auto timeline2 = Timeline(srate2);
+
+		auto tempo1 = 120.0;
+		auto tempo2 = 60.0;
+		auto tempo3 = 1.0;
+		auto tempo4 = 500.0;
+		BOOST_CHECK_EQUAL(timeline1.getSamplesPerBeat(120.0), srate1 / 2);
+		BOOST_CHECK_EQUAL(timeline2.getSamplesPerBeat(120.0), srate2 / 2);
+
+		BOOST_CHECK_EQUAL(timeline1.getSamplesPerBeat(60.0), srate1);
+		BOOST_CHECK_EQUAL(timeline2.getSamplesPerBeat(60.0), srate2);
+
+		BOOST_CHECK_EQUAL(timeline1.getSamplesPerBeat(1.0), srate1 * 60);
+		BOOST_CHECK_EQUAL(timeline2.getSamplesPerBeat(1.0), srate2 * 60);
+
+		BOOST_CHECK_EQUAL(timeline1.getSamplesPerBeat(500.0), (srate1 / 500.0) * 60.0);
+		BOOST_CHECK_EQUAL(timeline2.getSamplesPerBeat(500.0), (srate2 / 500.0) * 60.0);
+
+		BOOST_CHECK_THROW(timeline1.getSamplesPerBeat(0), InvalidArgumentException);
+		BOOST_CHECK_THROW(timeline1.getSamplesPerBeat(-1000), InvalidArgumentException);
+		BOOST_CHECK_THROW(timeline1.getSamplesPerBeat(501), InvalidArgumentException);
+		BOOST_CHECK_THROW(timeline1.getSamplesPerBeat(1000), InvalidArgumentException);
+	}
+
 BOOST_AUTO_TEST_SUITE_END();

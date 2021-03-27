@@ -13,12 +13,39 @@
 class Clip
 {
 public:
+	/**
+	 * Create a new clip that starts and ends at frame 0.
+	 */
 	Clip();
+
+	/**
+	 * Copy the given clip.
+	 */
 	Clip(const Clip& toCopy);
-	void setStartEndFrames(int32_t newStart, int32_t newEnd);
-	int32_t getStartFrame();
-	int32_t getEndFrame();
+
+	/**
+	 * Set the start and end frames of this clip.
+	 *
+	 * @throw InvalidArgumentException If newEnd < newStart.
+	 * @param newStart The new starting sample of this clip.
+	 * @param newEnd The new ending sample of this clip.
+	 */
+	void setStartEndFrames(uint32_t newStart, uint32_t newEnd);
+
+	/**
+	 * Get the start frame of this clip.
+	 *
+	 * @return The start frame of this clip.
+	 */
+	uint32_t getStartFrame();
+
+	/**
+	 * Get the end frame of this clip.
+	 *
+	 * @return The end frame of this clip.
+	 */
+	uint32_t getEndFrame();
 private:
-	int32_t startFrame;
-	int32_t endFrame;
+	uint32_t startFrame;
+	uint32_t endFrame;
 };

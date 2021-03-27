@@ -1,5 +1,7 @@
 #include "Clip.h"
 
+#include "../Exceptions/InvalidArgumentException.h"
+
 Clip::Clip()
 {
 	startFrame = endFrame = 0;
@@ -11,19 +13,19 @@ Clip::Clip(const Clip& toCopy)
 	endFrame = toCopy.endFrame;
 }
 
-void Clip::setStartEndFrames(int32_t newStart, int32_t newEnd)
+void Clip::setStartEndFrames(uint32_t newStart, uint32_t newEnd)
 {
-	// TODO check bounds
+	if (newEnd < newStart) throw InvalidArgumentException();
 	startFrame = newStart;
 	endFrame = newEnd;
 }
 
-int32_t Clip::getStartFrame()
+uint32_t Clip::getStartFrame()
 {
 	return startFrame;
 }
 
-int32_t Clip::getEndFrame()
+uint32_t Clip::getEndFrame()
 {
 	return endFrame;
 }

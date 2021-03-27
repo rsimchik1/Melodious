@@ -34,3 +34,12 @@ void Timeline::shiftPlaybackHead(int32_t offset)
 
 	playbackLocation += offset;
 }
+
+float Timeline::getSamplesPerBeat(float beatsPerMinute)
+{
+	if (beatsPerMinute < 1 || beatsPerMinute > 500)
+		throw InvalidArgumentException();
+
+	float oneBeatPerSecond = 60.0;
+	return (sampleRate / beatsPerMinute) * oneBeatPerSecond;
+}
