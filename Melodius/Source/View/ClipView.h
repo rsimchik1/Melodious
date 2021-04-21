@@ -2,20 +2,26 @@
 
 #include "JuceHeader.h"
 
-class ClipView : public juce::Component
+class ClipView : public juce::Component, public juce::MouseListener
 {
 public:
-	ClipView(uint32_t start = 0, uint32_t end = 0);
+	ClipView();
+	~ClipView() override;
+
 	void paint(juce::Graphics& g) override;
-	uint32_t getStartSample();
-	uint32_t getEndSample();
-	void setStartEndSample(uint32_t start, uint32_t end);
-	void setColor(juce::Colour fillColor);
+	void resized() override;
+	void mouseDown(const juce::MouseEvent& event) override;
+	void mouseDrag(const juce::MouseEvent& event) override;
+
+	// x position without scroll or zoom modifications
+	float getTrueX();
+	void setTrueX(float trueX);
 private:
-	const float borderRadius = 3;
-	const float borderThickness = 2;
-	uint32_t start;
-	uint32_t end;
-	juce::Colour fillColor;
-	juce::Colour borderColor;
+	float x;
+	int trackIndex;
+	
+	juce::AudioThumbnail *waveformDisplay;
+	juce::ResizableBorderComponent* resizable;
+	juce::ComponentBoundsConstrainer* borderConstrainer;
+	juce::ComponentDragger draggable;
 };

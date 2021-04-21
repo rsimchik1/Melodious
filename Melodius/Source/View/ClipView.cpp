@@ -1,43 +1,60 @@
 #include "ClipView.h"
 
-#include "../Exceptions/InvalidArgumentException.h"
-
-ClipView::ClipView(uint32_t start, uint32_t end)
+ClipView::ClipView()
 {
-	this->start = start;
-	this->end = end;
+	waveformDisplay = nullptr;
+	borderConstrainer = new juce::ComponentBoundsConstrainer();
+	borderConstrainer->setMinimumWidth(2);
+	resizable = new juce::ResizableBorderComponent(this, borderConstrainer);
+	resizable->setBorderThickness(juce::BorderSize<int>(0, 5, 0, 5));
+	addAndMakeVisible(resizable);
+}
+
+ClipView::~ClipView()
+{
+	if (waveformDisplay) delete waveformDisplay;
+	waveformDisplay = nullptr;
+
+	delete resizable;
+	resizable = nullptr;
+
+	delete borderConstrainer;
+	borderConstrainer = nullptr;
 }
 
 void ClipView::paint(juce::Graphics& g)
 {
-	g.setColour(fillColor);
-	g.fillRoundedRectangle(getX(), getY(), getWidth(), getHeight(), borderRadius);
-
-	g.setColour(borderColor);
-	g.drawRoundedRectangle(getX(), getY(), getWidth(), getHeight(), borderRadius, borderThickness);
+	g.setColour(juce::Colours::darkred);
+	g.fillRect(getLocalBounds());
+	g.setColour(juce::Colours::black);
+	g.drawRect(getLocalBounds());
+	g.setColour(juce::Colours::black);
+	g.drawFittedText("FILE NOT FOUND", getLocalBounds(), juce::Justification::centred, 1, 1);
 }
 
-uint32_t ClipView::getStartSample()
+void ClipView::resized()
 {
-	return start;
+	borderConstrainer->setMaximumHeight(getHeight());
+	borderConstrainer->setMinimumHeight(getHeight());
+	resizable->setBounds(getLocalBounds());
 }
 
-uint32_t ClipView::getEndSample()
+void ClipView::mouseDown(const juce::MouseEvent& event)
 {
-	return end;
+	draggable.startDraggingComponent(this, event);
 }
 
-void ClipView::setStartEndSample(uint32_t start, uint32_t end)
+void ClipView::mouseDrag(const juce::MouseEvent& event)
 {
-	if (end < start)
-		throw InvalidArgumentException();
-
-	this->start = start;
-	this->end = end;
+	draggable.dragComponent(this, event, nullptr);
 }
 
-void ClipView::setColor(juce::Colour fillColor)
+float ClipView::getTrueX()
 {
-	this->fillColor = fillColor;
-	this->borderColor = fillColor.darker(0.8f);
+	return x;
+}
+
+void ClipView::setTrueX(float trueX)
+{
+	x = trueX;
 }

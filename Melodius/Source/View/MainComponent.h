@@ -3,7 +3,8 @@
 #include <JuceHeader.h>
 
 #include "../Model/ChannelMixer.h"
-#include "ArrangeView.h"
+#include "ArrangementView.h"
+#include "MixHeaderView.h"
 
 //==============================================================================
 /*
@@ -34,7 +35,8 @@ private:
     ChannelMixer mixer;
     Timeline timeline;
 
-    ArrangeView arrangeView;
+    MixHeaderView mixHeaderView;
+    ArrangementView arrangementView;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

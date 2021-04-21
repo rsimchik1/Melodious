@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 
-#include "File.h"
+#include "../Utils/File.h"
 
 /**
  * Bare Clip class containing the basic attributes of all clips. Not especially
