@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="W4DsqV" name="Melodius" projectType="guiapp" useAppConfig="0"
+<JUCERPROJECT id="W4DsqV" name="Melodious" projectType="guiapp" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="0" jucerFormatVersion="1"
               version="0.1">
-  <MAINGROUP id="gpzsIS" name="Melodius">
+  <MAINGROUP id="gpzsIS" name="Melodious">
     <GROUP id="{1587D472-40C7-1A79-0501-4F9CF5E29BAA}" name="Source">
       <FILE id="v7W1nU" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="lNDBsF" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
@@ -15,8 +15,8 @@
   <EXPORTFORMATS>
     <VS2019 targetFolder="Builds/VisualStudio2019">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug" targetName="Nostation"/>
-        <CONFIGURATION isDebug="0" name="Release" targetName="Nostation"/>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="Melodious"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="Melodious"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_audio_basics" path="C:/JUCE/modules"/>
