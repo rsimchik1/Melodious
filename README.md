@@ -1,2 +1,2 @@
-# Melodius
+# Melodious
 The free and open source notation and audio workstation!
