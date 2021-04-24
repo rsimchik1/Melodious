@@ -1,12 +1,14 @@
 #include "FileManager.h"
 
+#include <filesystem>
+
 #include "../Exceptions/FileAccessException.h"
 #include "../Exceptions/InvalidArgumentException.h"
 
 FileManager::~FileManager()
 {
 	for (auto handle : invalidHandles)
-		getFile(handle)->deleteFromDisk();
+		files[handle]->deleteFromDisk();
 
 	for (auto *file : files)
 		delete file;
@@ -28,13 +30,19 @@ int FileManager::createNewFile(std::string path, bool renameIfTaken)
 	{
 		if (renameIfTaken)
 		{
+			auto tempPath = std::filesystem::path(path);
+			auto extension = tempPath.extension();
+			tempPath.replace_extension();
+			std::string newPath;
 			unsigned int i = 1;
-			while (File::pathExists(path + " (" + std::to_string(i) + ")"))
+			while (File::pathExists(newPath = tempPath.generic_string() +
+									" (" + std::to_string(i) + ")" + 
+									extension.generic_string()))
 			{
 				i++;
 			}
 
-			path = path + " (" + std::to_string(i) + ")";
+			path = newPath;
 		}
 		else throw FileAccessException();
 	}
@@ -74,7 +82,9 @@ int FileManager::getFileHandle(std::string path)
 {
 	for (auto i = 0; i < files.size(); i++)
 	{
-		if (files[i]->getPath().compare(path) == 0)
+		auto path1 = std::filesystem::path(files[i]->getPath()).lexically_normal();
+		auto path2 = std::filesystem::path(path).lexically_normal();
+		if (path1.compare(path2) == 0)
 			return i;
 	}
 
@@ -83,7 +93,7 @@ int FileManager::getFileHandle(std::string path)
 
 File* FileManager::getFile(int handle)
 {
-	if (handle < 0 || handle >= files.size())
+	if (!isHandleValid(handle) || handle < 0 || handle >= files.size())
 		throw InvalidArgumentException();
 
 	return files[handle];
@@ -100,16 +110,16 @@ void FileManager::invalidateHandle(int handle)
 
 void FileManager::restoreInvalidHandle(int invalidHandle)
 {
-	if (invalidHandle < 0 || invalidHandle >= files.size())
+	if (isHandleValid(invalidHandle))
 		throw InvalidArgumentException();
 
-	for (auto i = 0; i < files.size(); i++)
+	auto i = invalidHandles.begin();
+	while (i != invalidHandles.end())
 	{
-		if (invalidHandles[i] == invalidHandle)
-		{
-			invalidHandles.erase(invalidHandles.begin() + i);
-			i--; // account for shifting elements
-		}
+		if (*i == invalidHandle)
+			i = invalidHandles.erase(i);
+		else
+			i++;
 	}
 }
 

@@ -33,27 +33,47 @@ public:
 	~AudioFile();
 
 	/**
-	 * Write a buffer of data to disk. Read/write head will be incremented by
-	 * the number of frames written. If writing starts past the end of the file,
-	 * the preceding empty space will be filled with zeros.
+	 * Write a block of data to disk. Read/write head will be incremented by
+	 * the number of frames in the block. If writing starts past the end of the
+	 * file, the preceding empty space will be filled with zeros.
 	 *
-	 * @throw FileAccessException If this file is not currently open.
-	 * @param buffer The data to write.
+	 * @throw FileAccessException If this file is not currently open, or if data
+	 * cannot be written.
+	 * @param block The data to write.
 	 */
-	void writeBuffer(AudioBuffer buffer);
+	void writeBlock(AudioBuffer block);
 
 	/**
-	 * Read a number of frames from disk. Read/write head will be incremented by
+	 * Read a block of frames from disk. Read/write head will be incremented by
 	 * the number of frames read. If the end of the file is reached, the
 	 * AudioBuffer's size will match the number of samples that were read (if
 	 * reading starts past the end of the file, an empty AudioBuffer will be
 	 * returned).
 	 *
-	 * @throw FileAccessException If this file is not currently open.
-	 * @param numFrames The number of frames to read.
+	 * @throw FileAccessException If this file is not currently open, or if data
+	 * cannot be written.
 	 * @return An AudioBuffer containing the data that was read.
 	 */
-	AudioBuffer readFrames(int numFrames);
+	AudioBuffer readFrames();
+
+	/**
+	 * Set the properties of the audio file to be written.
+	 *
+	 * @param sampleRate The samples per second to be stored in the file.
+	 * @param numChannels The number of audio channels in the file.
+	 * @param bitDepth The number of bits per sample in the file.
+	 */
+	void prepareToWrite(int sampleRate, int numChannels, int bitDepth);
+
+	/**
+	 * Set the number of samples to read at a time and the sample rate used by
+	 * the application (may be different than the file's sample rate).
+	 *
+	 * @param framesPerBlock Number of frames to be read by readFrames()
+	 * @param sampleRate Sample rate expected by the application.
+	 * @param numChannels Number of channels expected by the application.
+	 */
+	void prepareToRead(int framesPerBlock, int sampleRate, int numChannels);
 
 	/**
 	 * Set the position of the read/write head to the given frame.
@@ -69,20 +89,25 @@ public:
 	void deleteFromDisk() override;
 private:
 	static const std::vector<std::string> SUPPORTED_EXTENSIONS;
-	static const int WRITE_BUFFER_SIZE = 4096;
 
+	int fileSampleRate;
+	int fileNumChannels;
+	int fileBitDepth;
+
+	int readerSampleRate;
+	int readerNumChannels;
+	int readerBlockSize;
+	std::atomic<bool> currentlyOpen;
 	std::string extension;
 	uint32_t readWriteHead;
 
 	std::unique_ptr<juce::File> file;
-	juce::AudioFormatManager* formatManager;
-	juce::AudioFormat* format;
+	juce::AudioFormatManager formatManager;
+	std::unique_ptr<juce::AudioFormatReaderSource> readerSource;
+	std::unique_ptr<juce::AudioTransportSource> transportSource;
 	std::unique_ptr<juce::AudioFormatWriter> writer;
-	std::unique_ptr<juce::FileOutputStream> writeStream;
-	std::unique_ptr<juce::AudioFormatReader> reader;
-	std::unique_ptr<juce::FileInputStream> readStream;
 
-	std::atomic<bool> currentlyOpen;
+	std::unique_ptr<juce::AudioTransportSource> juceBuffer;
 
 	void initializeRead();
 	void initializeWrite(int sampleRate, int numChannels, int bitDepth);

@@ -25,35 +25,46 @@ BOOST_AUTO_TEST_CASE(AudioFileConstructorTest)
 BOOST_AUTO_TEST_CASE(AudioFileCreateDeleteTest)
 {
 	auto audioFile = AudioFile(TEST_DIR + "test2.wav");
+	int sampleRate = 44100, numChannels = 1, bitDepth = 32;
+	audioFile.prepareToWrite(sampleRate, numChannels, bitDepth);
 	BOOST_CHECK_NO_THROW(audioFile.createOnDisk());
+	BOOST_CHECK_EQUAL(true, std::filesystem::exists(TEST_DIR + "test2.wav"));
+	BOOST_CHECK_NO_THROW(AudioFile(TEST_DIR + "test2.wav"));
 	BOOST_CHECK_NO_THROW(audioFile.deleteFromDisk());
+	BOOST_CHECK_EQUAL(false, std::filesystem::exists(TEST_DIR + "test2.wav"));
 }
 
 BOOST_AUTO_TEST_CASE(AuidoFileReadWriteTest)
 {
 	auto audioFile = AudioFile(TEST_DIR + "test3.wav");
-	audioFile.createOnDisk();
 	auto inputBuffer = AudioBuffer(8, 1);
+	int sampleRate = 44100, numChannels = 1, bitDepth = 32;
 	float testData[] = { 0.1, -0.2, 0.3, -0.4, 0.5, -0.6, 0.7, -0.8 };
 	for (auto i = 0; i < 8; i++)
 		inputBuffer.writeSampleAt(i, 0, testData[i]);
+	
+	audioFile.createOnDisk();
+	audioFile.prepareToWrite(sampleRate, numChannels, bitDepth);
 
 	BOOST_CHECK_EQUAL(audioFile.isOpen(), false);
-	BOOST_CHECK_THROW(audioFile.writeBuffer(inputBuffer), FileAccessException);
+	BOOST_CHECK_THROW(audioFile.writeBlock(inputBuffer), FileAccessException);
 	BOOST_CHECK_NO_THROW(audioFile.open());
 	BOOST_CHECK_EQUAL(audioFile.isOpen(), true);
-	BOOST_CHECK_NO_THROW(audioFile.writeBuffer(inputBuffer));
+	BOOST_CHECK_NO_THROW(audioFile.writeBlock(inputBuffer));
 	BOOST_CHECK_NO_THROW(audioFile.close());
-
 	BOOST_CHECK_EQUAL(audioFile.isOpen(), false);
+
 	AudioBuffer outputBuffer(8,1);
 
-	BOOST_CHECK_THROW(outputBuffer = audioFile.readFrames(8), FileAccessException);
-	audioFile.open();
-	BOOST_CHECK_NO_THROW(outputBuffer = audioFile.readFrames(8));
-	BOOST_CHECK_EQUAL(outputBuffer.getNumFrames(), 0);
 	BOOST_CHECK_NO_THROW(audioFile.moveToFrame(0));
-	BOOST_CHECK_NO_THROW(outputBuffer = audioFile.readFrames(8));
+	BOOST_CHECK_NO_THROW(audioFile.prepareToRead(outputBuffer.getNumFrames(),
+												 sampleRate, 
+												 outputBuffer.getNumChannels()));
+	BOOST_CHECK_THROW(outputBuffer = audioFile.readFrames(), FileAccessException);
+	audioFile.open();
+	BOOST_CHECK_NO_THROW(outputBuffer = audioFile.readFrames());
+	BOOST_CHECK_EQUAL(outputBuffer.getNumFrames(), 8);
+	BOOST_CHECK_NO_THROW(audioFile.moveToFrame(0));
 
 	BOOST_CHECK_EQUAL(inputBuffer.getNumFrames(), outputBuffer.getNumFrames());
 	BOOST_CHECK_EQUAL(inputBuffer.getNumChannels(), outputBuffer.getNumChannels());
@@ -61,10 +72,33 @@ BOOST_AUTO_TEST_CASE(AuidoFileReadWriteTest)
 	float expectedSum = 0.0, actualSum = 0.0;
 	for (auto i = 0; i < 8; i++)
 	{
-		expectedSum += outputBuffer.readSampleAt(i, 0);
-		actualSum += inputBuffer.readSampleAt(i, 0);
+		expectedSum += inputBuffer.readSampleAt(i, 0);
+		actualSum += outputBuffer.readSampleAt(i, 0);
 	}
 	BOOST_CHECK_EQUAL(expectedSum, actualSum);
+
+	auto existingFile = AudioFile(TEST_DIR + "test3.wav");
+	BOOST_CHECK_NO_THROW(existingFile.moveToFrame(0));
+	BOOST_CHECK_NO_THROW(existingFile.prepareToRead(outputBuffer.getNumFrames(),
+												 sampleRate, 
+												 outputBuffer.getNumChannels()));
+	BOOST_CHECK_THROW(outputBuffer = existingFile.readFrames(), FileAccessException);
+	existingFile.open();
+	BOOST_CHECK_NO_THROW(outputBuffer = existingFile.readFrames());
+	BOOST_CHECK_EQUAL(outputBuffer.getNumFrames(), 8);
+	BOOST_CHECK_NO_THROW(existingFile.moveToFrame(0));
+
+	BOOST_CHECK_EQUAL(inputBuffer.getNumFrames(), outputBuffer.getNumFrames());
+	BOOST_CHECK_EQUAL(inputBuffer.getNumChannels(), outputBuffer.getNumChannels());
+
+	expectedSum = 0.0, actualSum = 0.0;
+	for (auto i = 0; i < 8; i++)
+	{
+		expectedSum += inputBuffer.readSampleAt(i, 0);
+		actualSum += outputBuffer.readSampleAt(i, 0);
+	}
+	
+	audioFile.deleteFromDisk();
 }
 
 BOOST_AUTO_TEST_CASE(AudioFileExtensionsTest)
