@@ -1,9 +1,11 @@
 #include "ArrangementView.h"
 
 ArrangementView::ArrangementView()
+	: trackListController(std::make_shared<TrackListController>(new ChannelMixer()))
 {
     setFramesPerSecond(60);
     trackControlsList.setSize(TrackControlsListView::DEFAULT_WIDTH, getHeight() - scrollBarSize);
+    trackControlsList.addObserver(trackListController);
 
     this->resizable = new juce::ResizableBorderComponent(&trackControlsList, nullptr);
     resizable->setBorderThickness(juce::BorderSize<int>(0, 5, 0, 0));
@@ -172,9 +174,6 @@ void ArrangementView::scrollBarMoved(juce::ScrollBar* scrollBarThatHasMoved, dou
 
 void ArrangementView::update()
 {
-    static int playheadPos = 0;
-    playheadPos++;
-    playheadView.setPlayheadPos(playheadPos);
 }
 
 void ArrangementView::paint(juce::Graphics& g)

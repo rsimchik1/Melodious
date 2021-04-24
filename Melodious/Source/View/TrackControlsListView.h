@@ -6,7 +6,9 @@
 #include "TrackControlsView.h"
 
 class TrackControlsListView : public juce::Component,
-							  public ScrollableContent
+							  public ScrollableContent,
+							  public juce::Button::Listener,
+							  public Observable<TrackControlsListView>
 {
 public:
 	enum ColourIds
@@ -28,9 +30,7 @@ public:
 
 	void paint(juce::Graphics& g) override;
 	void resized() override;
-
-	void appendNewTrackControls();
-	TrackControlsView* getTrackAt(int index);
+	void buttonClicked(juce::Button*) override;
 
 	void scrollX(float deltaX) override;
 	void scrollY(float deltaY) override;
@@ -38,6 +38,9 @@ public:
 	void setScrollY(float y) override;
 	float getContentWidth() override;
 	float getContentHeight() override;
+
+	TrackControlsView* appendNewTrackControls();
+	TrackControlsView* getTrackAt(int index);
 private:
     std::vector<TrackControlsView *> children;
 	AddTrackView addTrackView;
@@ -49,5 +52,6 @@ private:
 	float scrollYMax;
 
 	void calculateScrollYMax();
+public:
 };
 

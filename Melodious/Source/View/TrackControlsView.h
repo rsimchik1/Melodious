@@ -2,8 +2,12 @@
 
 #include "ButtonLookAndFeel.h"
 #include "JuceHeader.h"
+#include "../Controller/Observable.h"
 
-class TrackControlsView : public juce::Component, juce::Label::Listener
+class TrackControlsView : public juce::Component,
+						  juce::Label::Listener,
+						  juce::Slider::Listener,
+                          public Observable<TrackControlsView>
 {
 public:
     enum ColourIds
@@ -31,6 +35,10 @@ public:
 	void resized() override;
     void setName(const juce::String& newName) override;
     void labelTextChanged(juce::Label* labelThatHasChanged) override;
+    void sliderValueChanged(juce::Slider* slider) override;
+
+    float getVolume();
+    float getPan();
 private:
     class VolumeLookAndFeel;
     class PanLookAndFeel;

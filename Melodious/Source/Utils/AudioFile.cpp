@@ -32,8 +32,6 @@ AudioFile::AudioFile(std::string absolutePath): File(absolutePath),
 
 	this->file = std::make_unique<juce::File>(juce::File(absolutePath));
 
-	this->juceBuffer = std::make_unique<juce::AudioTransportSource>();
-
 	if (file->exists())
 		initializeRead();
 }

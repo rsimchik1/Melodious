@@ -6,9 +6,10 @@
 
 #include "TrackControlsListView.h"
 #include "TrackLaneListView.h"
+#include "../Controller/TrackListController.h"
 
 class ArrangementView : public juce::AnimatedAppComponent,
-					   public juce::ScrollBar::Listener
+                        public juce::ScrollBar::Listener
 {
 public:
 	ArrangementView();
@@ -32,6 +33,7 @@ private:
     int numTracks = 0;
     TrackControlsListView trackControlsList;
     TrackLaneListView trackLaneList;
+    std::shared_ptr<TrackListController> trackListController;
     TimelineView timelineView;
     PlayheadView playheadView;
     

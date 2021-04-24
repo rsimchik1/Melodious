@@ -8,6 +8,7 @@ TrackControlsListView::TrackControlsListView()
 
     getLookAndFeel().setColour(backgroundColourId, juce::Colour(defaultBackgroundColour));
     getLookAndFeel().setColour(borderColourId, juce::Colour(defaultBorderColour));
+    addTrackView.addListener(this);
     addAndMakeVisible(addTrackView);
 }
 
@@ -52,7 +53,12 @@ void TrackControlsListView::resized()
     if (getParentComponent()) getParentComponent()->resized();
 }
 
-void TrackControlsListView::appendNewTrackControls()
+void TrackControlsListView::buttonClicked(juce::Button*)
+{
+    notifyObservers();
+}
+
+TrackControlsView* TrackControlsListView::appendNewTrackControls()
 {
     auto *trackControls = new TrackControlsView();
     trackControls->setName("New Track");
@@ -62,6 +68,9 @@ void TrackControlsListView::appendNewTrackControls()
     addAndMakeVisible(trackControls);
 
     calculateScrollYMax();
+    resized();
+
+    return trackControls;
 }
 
 TrackControlsView* TrackControlsListView::getTrackAt(int index)

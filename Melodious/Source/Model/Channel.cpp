@@ -78,3 +78,8 @@ bool Channel::hasParent()
 {
 	return parent != nullptr;
 }
+
+ChannelModifiers& Channel::getModifiers()
+{
+	return modifiers;
+}

@@ -26,44 +26,6 @@ MainComponent::MainComponent()
         setAudioChannels (2, 2);
     }
 
-    mixer.createAudioChannel();
-    mixer.createAudioChannel();
-    mixer.createAudioChannel();
-    mixer.createBusChannel();
-    mixer.connectChannels(0, 3);
-    mixer.connectChannels(1, 3);
-    mixer.connectChannels(2, 3);
-
-    auto reader1 = new OscClipReader();
-    auto reader2 = new OscClipReader();
-    auto reader3 = new OscClipReader();
-    auto track1 = new Track<OscClip>(reader1);
-    auto track2 = new Track<OscClip>(reader2);
-    auto track3 = new Track<OscClip>(reader3);
-
-    const float baseFreq = 260.0;
-    auto *clip1 = new OscClip(baseFreq, 0.25);
-    auto *clip2 = new OscClip(baseFreq * 3.0/2, 0.25);
-    auto *clip3 = new OscClip(baseFreq * 5.0/4, 0.25);
-    auto *clip4 = new OscClip(baseFreq * 2, 0.25);
-    clip1->setStartEndFrames(sampleRate * starts[0], sampleRate * ends[0]);
-    clip2->setStartEndFrames(sampleRate * starts[1], sampleRate * ends[1]);
-    clip3->setStartEndFrames(sampleRate * starts[2], sampleRate * ends[2]);
-    clip4->setStartEndFrames(sampleRate * starts[3], sampleRate * ends[3]);
-
-    track1->insertClip(clip1);
-    track2->insertClip(clip2);
-    track3->insertClip(clip3);
-    track1->insertClip(clip4);
-
-    dynamic_cast<LeafChannel *>(mixer.getChannelAt(0))->setAudioSource(track1);
-    dynamic_cast<LeafChannel *>(mixer.getChannelAt(1))->setAudioSource(track2);
-    dynamic_cast<LeafChannel *>(mixer.getChannelAt(2))->setAudioSource(track3);
-
-    for (int i = 0; i < 3; i++)
-        arrangementView.createAndAppendTrack();
-
-    arrangementView.createClipOnTrack(1, 30, 2000);
     addAndMakeVisible(arrangementView);
     addAndMakeVisible(mixHeaderView);
 

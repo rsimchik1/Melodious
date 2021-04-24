@@ -33,6 +33,11 @@ void AddTrackView::resized()
 	addButton.setBounds(addButtonBounds);
 }
 
+void AddTrackView::addListener(juce::Button::Listener* listener)
+{
+	addButton.addListener(listener);
+}
+
 AddTrackView::AddButtonLookAndFeel::AddButtonLookAndFeel()
 {
 	setColour(juce::TextButton::buttonColourId, juce::Colours::transparentBlack);

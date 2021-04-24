@@ -10,9 +10,7 @@ BOOST_AUTO_TEST_SUITE(ChannelTest);
 BOOST_AUTO_TEST_CASE(ChannelConstructorsTest)
 {
 	auto validParent = NodeChannel();
-	auto invalidParent = LeafChannel();
 	BOOST_CHECK(validParent.getParent() == nullptr);
-	BOOST_CHECK(invalidParent.getParent() == nullptr);
 
 	auto validChild1 = LeafChannel(&validParent);
 	auto validChild2 = NodeChannel(&validParent);
@@ -20,17 +18,6 @@ BOOST_AUTO_TEST_CASE(ChannelConstructorsTest)
 	BOOST_CHECK(validParent.hasChild(&validChild1));
 	BOOST_CHECK(validChild2.getParent() == &validParent);
 	BOOST_CHECK(validParent.hasChild(&validChild2));
-
-	LeafChannel invalidChild1;
-	NodeChannel invalidChild2;
-	BOOST_CHECK_THROW(invalidChild1 = LeafChannel(&invalidParent), 
-		InvalidChannelTreeException);
-	BOOST_CHECK_THROW(invalidChild2 = NodeChannel(&invalidParent),
-		InvalidChannelTreeException);
-	BOOST_CHECK(!invalidChild1.hasParent());
-	BOOST_CHECK(!validParent.hasChild(&invalidChild1));
-	BOOST_CHECK(!invalidChild2.hasParent());
-	BOOST_CHECK(!validParent.hasChild(&invalidChild2));
 }
 
 BOOST_AUTO_TEST_CASE(ChannelParentChildTest)

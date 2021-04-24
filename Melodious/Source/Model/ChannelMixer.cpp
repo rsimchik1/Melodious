@@ -27,7 +27,7 @@ int ChannelMixer::getNumChannels() const
 	return channels.size();
 }
 
-void ChannelMixer::createAudioChannel(int index)
+Channel *ChannelMixer::createAudioChannel(int index)
 {
 	auto *newChannel = new LeafChannel();
 	try { insertChannel(index, newChannel); }
@@ -36,6 +36,8 @@ void ChannelMixer::createAudioChannel(int index)
 		delete newChannel;
 		throw e;
 	}
+
+	return newChannel;
 }
 
 void ChannelMixer::createBusChannel(int index)

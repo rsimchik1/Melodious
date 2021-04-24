@@ -107,8 +107,6 @@ private:
 	std::unique_ptr<juce::AudioTransportSource> transportSource;
 	std::unique_ptr<juce::AudioFormatWriter> writer;
 
-	std::unique_ptr<juce::AudioTransportSource> juceBuffer;
-
 	void initializeRead();
 	void initializeWrite(int sampleRate, int numChannels, int bitDepth);
 };

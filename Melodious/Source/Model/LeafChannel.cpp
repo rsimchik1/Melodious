@@ -22,10 +22,11 @@ LeafChannel::~LeafChannel()
 
 AudioBuffer LeafChannel::processFrames(int numFrames, const Timeline &relativeTime)
 {
-	if (audioSource)
-		return audioSource->processFrames(numFrames, relativeTime);
-	else
-		return AudioBuffer(numFrames, 2);
+	auto output = (audioSource) ? 
+		audioSource->processFrames(numFrames, relativeTime) :
+		AudioBuffer(numFrames, 2);
+
+	return modifiers.getModifiedBuffer(output);
 }
 
 void LeafChannel::setAudioSource(AudioNode *audioSource)

@@ -1,6 +1,7 @@
 #pragma once
 #include "AudioBuffer.h"
 #include "AudioNode.h"
+#include "ChannelModifiers.h"
 
 class Timeline;
 /**
@@ -69,7 +70,11 @@ public:
 	 * @return True if node has a parent, false otherwise.
 	 */
 	bool hasParent();
+
+	ChannelModifiers& getModifiers();
 protected:
+	ChannelModifiers modifiers;
+
 	/**
 	 * Add the given node to this node's children.
 	 *

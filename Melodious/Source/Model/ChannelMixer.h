@@ -53,7 +53,7 @@ public:
 	 * @param index The index at which the channel will be inserted. If no index
 	 * is specified or index < 0, the channel will be appended to the list.
 	 */
-	void createAudioChannel(int index = -1);
+	Channel *createAudioChannel(int index = -1);
 
 	/**
 	 * Create a new bus channel at the specified index, shifting existing

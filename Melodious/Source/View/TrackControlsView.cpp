@@ -10,6 +10,7 @@ TrackControlsView::TrackControlsView()
     volumeSlider.setValue(1);
     volumeSlider.setLookAndFeel(volumeLookAndFeel);
     volumeSlider.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
+    volumeSlider.addListener(this);
     addAndMakeVisible(volumeSlider);
 
     panLookAndFeel = new PanLookAndFeel();
@@ -17,6 +18,7 @@ TrackControlsView::TrackControlsView()
     panSlider.setValue(0);
     panSlider.setLookAndFeel(panLookAndFeel);
     panSlider.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
+    panSlider.addListener(this);
     addAndMakeVisible(panSlider);
 
     title.setFont(juce::Font("Arial", controlsSize, juce::Font::FontStyleFlags::plain));
@@ -132,6 +134,20 @@ void TrackControlsView::labelTextChanged(juce::Label* labelThatHasChanged)
     juce::Component::setName(labelThatHasChanged->getText());
 }
 
+void TrackControlsView::sliderValueChanged(juce::Slider* slider)
+{
+    notifyObservers();
+}
+
+float TrackControlsView::getVolume()
+{
+    return volumeSlider.getValue();
+}
+
+float TrackControlsView::getPan()
+{
+    return panSlider.getValue();
+}
 
 // Custom volume slider
 TrackControlsView::VolumeLookAndFeel::VolumeLookAndFeel()
