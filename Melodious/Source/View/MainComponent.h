@@ -5,6 +5,7 @@
 #include "../Model/ChannelMixer.h"
 #include "ArrangementView.h"
 #include "MixHeaderView.h"
+#include "../Controller/TransportController.h"
 
 //==============================================================================
 /*
@@ -35,8 +36,12 @@ private:
     ChannelMixer mixer;
     Timeline timeline;
 
-    MixHeaderView mixHeaderView;
+    TransportController::TransportState currentState;
+    TransportController transportController;
+    std::shared_ptr<TrackListController> trackListController;
     ArrangementView arrangementView;
+    MixHeaderView mixHeaderView;
+
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

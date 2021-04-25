@@ -99,9 +99,14 @@ void AudioFile::prepareToRead(int framesPerBlock, int sampleRate, int numChannel
 	transportSource->start();
 }
 
-void AudioFile::moveToFrame(uint32_t frame)
+void AudioFile::moveToFrame(uint64_t frame)
 {
 	readWriteHead = frame;
+}
+
+uint64_t AudioFile::getLengthInSamples()
+{
+	return readerSource->getTotalLength();
 }
 
 void AudioFile::open()

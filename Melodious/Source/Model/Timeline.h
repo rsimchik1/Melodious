@@ -24,14 +24,14 @@ public:
 	 *
 	 * @return An integer representing the current sample.
 	 */
-	uint32_t getPlaybackHead() const;
+	uint64_t getPlaybackHead() const;
 
 	/**
 	 * Move the current playback location to a new sample.
 	 *
 	 * @param newLocation The new playback location.
 	 */
-	void movePlaybackHead(uint32_t newLocation);
+	void movePlaybackHead(uint64_t newLocation);
 
 	/**
 	 * Shift the playback location forward or backward by a given number of samples.
@@ -54,5 +54,5 @@ public:
 	float getSamplesPerBeat(float beatsPerMinute);
 private:
 	int sampleRate;
-	uint32_t playbackLocation;
+	uint64_t playbackLocation;
 };

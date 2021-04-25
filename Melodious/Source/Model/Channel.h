@@ -18,6 +18,8 @@ class Timeline;
 class Channel : public AudioNode
 {
 public:
+	Channel();
+	~Channel();
 	/**
 	 * Get the output of this channel combined with any children or inputs.
 	 * Children are processed depth-first.
@@ -71,9 +73,9 @@ public:
 	 */
 	bool hasParent();
 
-	ChannelModifiers& getModifiers();
+	ChannelModifiers *getModifiers();
 protected:
-	ChannelModifiers modifiers;
+	ChannelModifiers *modifiers;
 
 	/**
 	 * Add the given node to this node's children.

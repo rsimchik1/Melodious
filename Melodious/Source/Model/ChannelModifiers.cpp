@@ -39,7 +39,6 @@ AudioBuffer ChannelModifiers::getModifiedBuffer(
 	const AudioBuffer& originalBuffer)
 {
 	auto modifiedBuffer = AudioBuffer(originalBuffer.getNumFrames(), 2);
-	if (pan == 0 && volume == 1) return modifiedBuffer;
 
 	// Constant power pan law
 	const double piOver2 = 4.0 * atan(1.0) * 0.5;
@@ -57,4 +56,6 @@ AudioBuffer ChannelModifiers::getModifiedBuffer(
 		modifiedBuffer.writeSampleAt(frame, 0, lSample * lGain * volume);
 		modifiedBuffer.writeSampleAt(frame, 1, rSample * rGain * volume);
 	}
+
+	return modifiedBuffer;
 }

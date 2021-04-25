@@ -3,6 +3,7 @@
 #include "Channel.h"
 #include "NodeChannel.h"
 #include "AudioNode.h"
+#include "LeafChannel.h"
 
 /**
  * Class that allows client code to sort and access channels by index and
@@ -53,7 +54,7 @@ public:
 	 * @param index The index at which the channel will be inserted. If no index
 	 * is specified or index < 0, the channel will be appended to the list.
 	 */
-	Channel *createAudioChannel(int index = -1);
+	LeafChannel *createAudioChannel(int index = -1);
 
 	/**
 	 * Create a new bus channel at the specified index, shifting existing

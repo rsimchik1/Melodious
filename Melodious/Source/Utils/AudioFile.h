@@ -80,7 +80,9 @@ public:
 	 *
 	 * @param frame The new position of the read/write head.
 	 */
-	void moveToFrame(uint32_t frame);
+	void moveToFrame(uint64_t frame);
+
+	uint64_t getLengthInSamples();
 
 	void open() override;
 	void close() override;
@@ -99,7 +101,7 @@ private:
 	int readerBlockSize;
 	std::atomic<bool> currentlyOpen;
 	std::string extension;
-	uint32_t readWriteHead;
+	uint64_t readWriteHead;
 
 	std::unique_ptr<juce::File> file;
 	juce::AudioFormatManager formatManager;

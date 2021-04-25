@@ -13,9 +13,14 @@ public:
 	 * @throw InvalidArgumentException If the input is null.
 	 * @param clip The clip to be read.
 	 */
-	void attachToClip(T* clip);
+	virtual void attachToClip(T* clip);
+
+	virtual void prepareToRead(int blockSize, int sampleRate, int numChannels);
 
 	virtual AudioBuffer processFrames(int numFrames, const Timeline& relativeTime) override = 0;
 protected:
 	T* attachedClip;
+	int blockSize;
+	int sampleRate;
+	int numChannels;
 };

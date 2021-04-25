@@ -26,7 +26,7 @@ AudioBuffer LeafChannel::processFrames(int numFrames, const Timeline &relativeTi
 		audioSource->processFrames(numFrames, relativeTime) :
 		AudioBuffer(numFrames, 2);
 
-	return modifiers.getModifiedBuffer(output);
+	return modifiers->getModifiedBuffer(output);
 }
 
 void LeafChannel::setAudioSource(AudioNode *audioSource)

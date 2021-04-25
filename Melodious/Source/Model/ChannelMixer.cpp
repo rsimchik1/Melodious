@@ -27,7 +27,7 @@ int ChannelMixer::getNumChannels() const
 	return channels.size();
 }
 
-Channel *ChannelMixer::createAudioChannel(int index)
+LeafChannel *ChannelMixer::createAudioChannel(int index)
 {
 	auto *newChannel = new LeafChannel();
 	try { insertChannel(index, newChannel); }

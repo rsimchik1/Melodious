@@ -8,27 +8,40 @@
 #include "TrackLaneListView.h"
 #include "../Controller/TrackListController.h"
 
+class TrackListController;
+
 class ArrangementView : public juce::AnimatedAppComponent,
                         public juce::ScrollBar::Listener
 {
 public:
-	ArrangementView();
+    struct TrackView;
+
+	ArrangementView(std::shared_ptr<TrackListController> trackListController);
 	~ArrangementView() override;
 
 	void resized() override;
 
-    void createAndAppendTrack();
-    void createClipOnTrack(int trackIndex, float startPixel, float length);
+    TrackView createAndAppendTrack();
+    ClipView* createClipOnTrack(int trackIndex, uint64_t startSample, uint64_t lengthInSamples);
     int getNumTracks();
 	void scrollBarMoved(juce::ScrollBar* scrollBarThatHasMoved, double newRangeStart) override;
 	void update() override;
 	void paint(juce::Graphics& g) override;
+
+    void setSampleRate(int sampleRate);
+    void setPlayheadSample(uint64_t sample);
+    void setMeter(int numerator, int denominator);
+    void setTempo(double beatsPerMinute);
 private:
     class ScrollBarLookAndFeel;
 	
     const int scrollBarSize = 20;
     const int timelineHeight = 35;
     double scrollX = 0, scrollY = 0;
+
+    double samplesPerPixel = 1000;
+    double samplesPerSecond = 44100;
+    double beatsPerMinute = 120;
 
     int numTracks = 0;
     TrackControlsListView trackControlsList;
@@ -41,6 +54,9 @@ private:
     juce::ScrollBar *horizontalScroll;
     ScrollBarLookAndFeel* scrollBarLookAndFeel;
 	juce::ResizableBorderComponent* resizable;
+
+    void resizeTimeline(double sampleRate, double beatsPerMinute);
+    void resizeClipView(ClipView* clipView);
 };
 
 class ArrangementView::ScrollBarLookAndFeel : public juce::LookAndFeel_V4
@@ -63,4 +79,10 @@ public:
 	    int thumbStartPosition, int thumbSize, bool isMouseOver, bool isMouseDown) override;
 private:
     int padding = 2;
+};
+
+struct ArrangementView::TrackView
+{
+	TrackControlsView* controls;
+	TrackLaneView* lane;
 };

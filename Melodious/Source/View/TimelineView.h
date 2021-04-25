@@ -41,6 +41,8 @@ public:
 	float getContentHeight() override;
 
 	void setSpacerWidth(float newWidth);
+	void setMeter(int numerator, int denominator);
+	void setSubdivisionWidth(double samplesPerBeat);
 private:
 	float measureSizePixels;
 	int beatsPerMeasure;

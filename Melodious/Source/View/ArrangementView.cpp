@@ -1,7 +1,6 @@
 #include "ArrangementView.h"
 
-ArrangementView::ArrangementView()
-	: trackListController(std::make_shared<TrackListController>(new ChannelMixer()))
+ArrangementView::ArrangementView(std::shared_ptr<TrackListController> trackListController)
 {
     setFramesPerSecond(60);
     trackControlsList.setSize(TrackControlsListView::DEFAULT_WIDTH, getHeight() - scrollBarSize);
@@ -24,7 +23,11 @@ ArrangementView::ArrangementView()
     horizontalScroll->setAutoHide(true);
     horizontalScroll->setCurrentRangeStart(0, juce::NotificationType::dontSendNotification);
 
-    playheadView.setPlayheadPos(50);
+    playheadView.setPlayheadPos(0);
+
+    setMeter(4, 4);
+    setTempo(beatsPerMinute);
+    setSampleRate(samplesPerSecond);
 
     addAndMakeVisible(verticalScroll);
     addAndMakeVisible(horizontalScroll);
@@ -134,21 +137,30 @@ void ArrangementView::resized()
     playheadViewBounds.setHeight(playheadViewBounds.getHeight() + playheadMarkerSize);
     playheadView.setBounds(playheadViewBounds);
     playheadView.setPlayheadMarkerHeight(playheadMarkerSize);
-
 }
 
-void ArrangementView::createAndAppendTrack()
+ArrangementView::TrackView ArrangementView::createAndAppendTrack()
 {
-    trackControlsList.appendNewTrackControls();
-    trackControlsList.getTrackAt(numTracks)->setName("Track " + std::to_string(numTracks + 1));
-    trackLaneList.appendNewTrackLane();
+    TrackView combined;
+    combined.controls = trackControlsList.appendNewTrackControls();
+    combined.controls->setName("Track " + std::to_string(numTracks + 1));
+    combined.lane = trackLaneList.appendNewTrackLane();
     this->numTracks++;
+
+    return combined;
 }
 
-void ArrangementView::createClipOnTrack(int trackIndex, float startPixel, float length)
+ClipView* ArrangementView::createClipOnTrack(int trackIndex, uint64_t startSample, uint64_t lengthInSamples)
 {
     auto trackAtIndex = trackLaneList.getTrackLaneAt(trackIndex);
-    trackLaneList.addAndMakeVisible(trackAtIndex->createClip(startPixel, length));
+    auto startPixel = startSample * samplesPerPixel;
+    auto lengthPixels = lengthInSamples * samplesPerPixel;
+    auto newClip = trackAtIndex->createClip(startPixel, lengthPixels);
+    newClip->setSampleRate(samplesPerSecond);
+    newClip->setStartEndSample(startSample, lengthInSamples);
+    resizeClipView(newClip);
+    trackLaneList.addAndMakeVisible(newClip);
+    return newClip;
 }
 
 int ArrangementView::getNumTracks()
@@ -178,6 +190,57 @@ void ArrangementView::update()
 
 void ArrangementView::paint(juce::Graphics& g)
 {
+}
+
+void ArrangementView::setSampleRate(int sampleRate)
+{
+    this->samplesPerSecond = sampleRate;
+    trackListController->setSampleRate(sampleRate);
+    resizeTimeline(samplesPerSecond, beatsPerMinute);
+    for (int i = 0; i < numTracks; i++)
+    {
+        auto track = trackLaneList.getTrackLaneAt(i);
+        for (auto clipView : track->getClipViews())
+            clipView->setSampleRate(sampleRate);
+    }
+}
+
+void ArrangementView::setPlayheadSample(uint64_t sample)
+{
+    auto xPos = (sample / samplesPerPixel) - scrollX;
+    playheadView.setPlayheadPos(xPos);
+}
+
+void ArrangementView::setMeter(int numerator, int denominator)
+{
+    timelineView.setMeter(numerator, denominator);
+    trackLaneList.setNumSubdivisions(numerator);
+}
+
+void ArrangementView::setTempo(double beatsPerMinute)
+{
+    this->beatsPerMinute = beatsPerMinute;
+    resizeTimeline(samplesPerSecond, beatsPerMinute);
+}
+
+void ArrangementView::resizeTimeline(double sampleRate, double beatsPerMinute)
+{
+	double oneBeatPerSecond = 60.0;
+	auto samplesPerBeat = (sampleRate / beatsPerMinute) * oneBeatPerSecond;
+    timelineView.setSubdivisionWidth(samplesPerBeat / samplesPerPixel);
+    trackLaneList.setSubdivisionWidth(samplesPerBeat / samplesPerPixel);
+    for (auto i = 0; i < numTracks; i++)
+        for (auto* clipView : trackLaneList.getTrackLaneAt(i)->getClipViews())
+            resizeClipView(clipView);
+	
+    resized();
+}
+
+void ArrangementView::resizeClipView(ClipView* clipView)
+{
+	auto clipBounds = clipView->getLocalBounds();
+	clipBounds.setWidth(clipView->getLengthInSamples() / samplesPerPixel);
+	clipView->setBounds(clipBounds);
 }
 
 ArrangementView::ScrollBarLookAndFeel::ScrollBarLookAndFeel()

@@ -63,6 +63,7 @@ AudioBuffer Track<T>::processFrames(int numFrames, const Timeline& relativeTime)
 	for (auto *clip : found)
 	{
 		reader->attachToClip(clip);
+		reader->prepareToRead(numFrames, relativeTime.getSampleRate(), 2);
 		outBuffer.addBuffer(reader->processFrames(numFrames, relativeTime));
 	}
 

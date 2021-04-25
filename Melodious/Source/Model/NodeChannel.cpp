@@ -32,7 +32,7 @@ AudioBuffer NodeChannel::processFrames(int numFrames, const Timeline& referenceT
 	{
 		toReturn.addBuffer(children[i]->processFrames(numFrames, referenceTimeline));
 	}
-	return modifiers.getModifiedBuffer(toReturn);
+	return modifiers->getModifiedBuffer(toReturn);
 }
 
 bool NodeChannel::hasChild(const Channel* childToFind)

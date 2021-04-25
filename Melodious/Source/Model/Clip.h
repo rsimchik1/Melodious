@@ -30,22 +30,22 @@ public:
 	 * @param newStart The new starting sample of this clip.
 	 * @param newEnd The new ending sample of this clip.
 	 */
-	void setStartEndFrames(uint32_t newStart, uint32_t newEnd);
+	void setStartEndFrames(uint64_t newStart, uint64_t newEnd);
 
 	/**
 	 * Get the start frame of this clip.
 	 *
 	 * @return The start frame of this clip.
 	 */
-	uint32_t getStartFrame();
+	uint64_t getStartFrame();
 
 	/**
 	 * Get the end frame of this clip.
 	 *
 	 * @return The end frame of this clip.
 	 */
-	uint32_t getEndFrame();
+	uint64_t getEndFrame();
 private:
-	uint32_t startFrame;
-	uint32_t endFrame;
+	uint64_t startFrame;
+	uint64_t endFrame;
 };

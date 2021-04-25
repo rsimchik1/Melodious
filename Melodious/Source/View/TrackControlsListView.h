@@ -41,6 +41,8 @@ public:
 
 	TrackControlsView* appendNewTrackControls();
 	TrackControlsView* getTrackAt(int index);
+
+	std::vector<juce::File> getLoadedFiles();
 private:
     std::vector<TrackControlsView *> children;
 	AddTrackView addTrackView;
@@ -50,6 +52,8 @@ private:
 	float scrollYAmount;
 	float scrollYMin;
 	float scrollYMax;
+
+	std::vector<juce::File> loadedFiles;
 
 	void calculateScrollYMax();
 public:

@@ -12,6 +12,7 @@ TimelineView::TimelineView()
 	this->scrollXAmount = minScrollX;
 	this->spacerWidth = 0;
 	this->spacerBorderThickness = 2;
+	setSubdivisionWidth(20);
 
 	getLookAndFeel().setColour(backgroundColourId, juce::Colour(defaultBackgroundColour));
 	getLookAndFeel().setColour(textColourId, juce::Colour(defaultTextColour));
@@ -37,7 +38,6 @@ void TimelineView::paint(juce::Graphics& g)
 	int i = (scrollXAmount / measureSizePixels) + 1;
 	for (auto x = fmod(-scrollXAmount, measureSizePixels); x < getWidth() - spacerWidth; x+=measureSizePixels)
 	{
-
 		g.setColour(getLookAndFeel().findColour(textColourId));
 		g.drawText(std::to_string(i), x + xOffset, 0, getHeight(), getHeight() - yOffset, 
 			juce::Justification::left, false);
@@ -115,4 +115,15 @@ void TimelineView::setSpacerWidth(float newWidth)
 	this->spacerWidth = newWidth;
 	resized();
 	repaint();
+}
+
+void TimelineView::setMeter(int numerator, int denominator)
+{
+	this->subdivideBy = numerator;
+	this->numSubdivisions = 1; // TODO figure this out
+}
+
+void TimelineView::setSubdivisionWidth(double samplesPerBeat)
+{
+	measureSizePixels = samplesPerBeat * subdivideBy * numSubdivisions;
 }

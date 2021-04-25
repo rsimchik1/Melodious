@@ -23,6 +23,14 @@ class AudioBuffer
 {
 public:
 	/**
+	 * Truncate samples that fall outside of the range -1 -> 1.
+	 *
+	 * @param sample The sample to clip.
+	 * @return A sample between -1 and 1.
+	 */
+	static float clipSample(float sample);
+
+	/**
 	 * Create a new AudioBuffer of fixed size {numFrames * numChannels}.
 	 *
 	 * @throw InvalidBufferException If numFrames <=0 or numChannels <= 0.
@@ -65,11 +73,11 @@ public:
 	float readSampleAt(int frameIndex, int channelIndex) const;
 
 	/**
-	 * Write an individual sample at the given frame and channel index.
+	 * Write an individual sample at the given frame and channel index. If the
+	 * sample is out of the range -1 -> 1, it will be truncated.
 	 *
 	 * @throw IndexOutOfBoundsException If frameIndex or channelIndex is less
 	 * than zero or too large for this buffer.
-	 * @throw InvalidSampleException If sample is less than -1 or greater than 1.
 	 * @param frameIndex Index of the frame to which the sample will be written.
 	 * @param channelIndex Index of the channel to which the sample will be
 	 * written.
@@ -78,7 +86,8 @@ public:
 	void writeSampleAt(int frameIndex, int channelIndex, float sample);
 
 	/**
-	 * Add all samples in otherBuffer to this buffer's samples.
+	 * Add all samples in otherBuffer to this buffer's samples. If the sum falls
+	 * outside of the range -1 -> 1, it will be truncated.
 	 * a[i] += b[i]
 	 *
 	 * @throw InvalidArgumentException If otherBuffer's dimensions do not match

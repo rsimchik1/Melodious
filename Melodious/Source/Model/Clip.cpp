@@ -13,19 +13,19 @@ Clip::Clip(const Clip& toCopy)
 	endFrame = toCopy.endFrame;
 }
 
-void Clip::setStartEndFrames(uint32_t newStart, uint32_t newEnd)
+void Clip::setStartEndFrames(uint64_t newStart, uint64_t newEnd)
 {
 	if (newEnd < newStart) throw InvalidArgumentException();
 	startFrame = newStart;
 	endFrame = newEnd;
 }
 
-uint32_t Clip::getStartFrame()
+uint64_t Clip::getStartFrame()
 {
 	return startFrame;
 }
 
-uint32_t Clip::getEndFrame()
+uint64_t Clip::getEndFrame()
 {
 	return endFrame;
 }

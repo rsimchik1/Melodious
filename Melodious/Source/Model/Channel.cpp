@@ -3,6 +3,15 @@
 #include "../Exceptions/InvalidArgumentException.h"
 #include "../Exceptions/InvalidChannelTreeException.h"
 
+Channel::Channel()
+	: modifiers(new ChannelModifiers())
+{}
+
+Channel::~Channel()
+{
+	delete modifiers;
+}
+
 void Channel::setParent(Channel *newParent)
 {
 	if (newParent == this)
@@ -79,7 +88,7 @@ bool Channel::hasParent()
 	return parent != nullptr;
 }
 
-ChannelModifiers& Channel::getModifiers()
+ChannelModifiers *Channel::getModifiers()
 {
 	return modifiers;
 }

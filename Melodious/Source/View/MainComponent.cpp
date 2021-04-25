@@ -1,19 +1,11 @@
 #include "MainComponent.h"
 
-#include "../Model/LeafChannel.h"
-#include "../Model/OscClip.h"
-#include "../Model/OscClipReader.h"
-
-
-const float starts[4] = { 0, 1, 2, 2.5 };
-const float ends[4] = { 2, 8, 10, 12 };
-//==============================================================================
 MainComponent::MainComponent()
+    : currentState(TransportController::Stopped),
+	transportController(&currentState),
+    trackListController(std::make_shared<TrackListController>(&mixer, &arrangementView)),
+	arrangementView(trackListController)
 {
-    // Make sure you set the size of the component after
-    // you add any child components.
-
-    // Some platforms require permissions to open input channels so request that here
     if (juce::RuntimePermissions::isRequired (juce::RuntimePermissions::recordAudio)
         && ! juce::RuntimePermissions::isGranted (juce::RuntimePermissions::recordAudio))
     {
@@ -22,11 +14,11 @@ MainComponent::MainComponent()
     }
     else
     {
-        // Specify the number of input and output channels that we want to open
         setAudioChannels (2, 2);
     }
 
     addAndMakeVisible(arrangementView);
+    mixHeaderView.addObserver(std::shared_ptr<TransportController>(&transportController));
     addAndMakeVisible(mixHeaderView);
 
     setSize (800, 600);
@@ -34,49 +26,56 @@ MainComponent::MainComponent()
 
 MainComponent::~MainComponent()
 {
-    // This shuts down the audio device and clears the audio source.
     shutdownAudio();
 }
 
 //==============================================================================
 void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
-    // This function will be called when the audio device is started, or when
-    // its settings (i.e. sample rate, block size, etc) are changed.
-
-    // You can use this function to initialise any resources you might need,
-    // but be careful - it will be called on the audio thread, not the GUI thread.
-
-    // For more details, see the help for AudioProcessor::prepareToPlay()
-
     this->sampleRate = sampleRate;
     timeline = Timeline(sampleRate);
+    arrangementView.setSampleRate(sampleRate);
 }
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
 {
-    // Your audio-processing code goes here!
-    auto buffer = mixer.processFrames(bufferToFill.numSamples, timeline);
-	for (int sample = 0; sample < bufferToFill.numSamples; sample++)
+    auto numFrames = bufferToFill.numSamples;
+    auto numChannels = bufferToFill.buffer->getNumChannels();
+    AudioBuffer buffer(numFrames, numChannels);
+    switch(currentState)
+    {
+        case TransportController::Playing:
+			buffer = mixer.processFrames(numFrames, timeline);
+            timeline.shiftPlaybackHead(numFrames);
+            break;
+        case TransportController::StartPlay:
+            currentState = TransportController::Playing;
+            break;
+        case TransportController::Stopping:
+            timeline.movePlaybackHead(0);
+            currentState = TransportController::Stopped;
+            break;
+        case TransportController::Stopped:
+            break;
+        case TransportController::Pausing:
+            currentState = TransportController::Paused;
+            break;
+    }
+	for (int sample = 0; sample < numFrames; sample++)
 	{
-		for (int channel = 0; channel < bufferToFill.buffer->getNumChannels(); channel++)
+		for (int channel = 0; channel < numChannels; channel++)
 		{
             bufferToFill.buffer->setSample(channel, sample,
                 buffer.readSampleAt(sample, channel));
 		}
 	}
-    timeline.shiftPlaybackHead(bufferToFill.numSamples);
+    arrangementView.setPlayheadSample(timeline.getPlaybackHead());
 }
 
 void MainComponent::releaseResources()
 {
-    // This will be called when the audio device stops, or when it is being
-    // restarted due to a setting change.
-
-    // For more details, see the help for AudioProcessor::releaseResources()
 }
 
-//==============================================================================
 void MainComponent::paint (juce::Graphics& g)
 {
 }

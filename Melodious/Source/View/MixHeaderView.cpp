@@ -1,6 +1,8 @@
 #include "MixHeaderView.h"
 
 MixHeaderView::MixHeaderView()
+	: lastState(false, false, false, false, 
+				false, false, false, false)
 {
 	setColour(backgroundColourId, juce::Colour(defaultBackgroundColour));
 	setColour(borderColourId, juce::Colour(defaultBorderColour));
@@ -43,6 +45,7 @@ MixHeaderView::MixHeaderView()
 	for (auto* button : buttons)
 	{
 		button->setLookAndFeel(buttonLookAndFeel);
+		button->addListener(this);
 		addAndMakeVisible(button);
 	}
 }
@@ -89,4 +92,38 @@ void MixHeaderView::resized()
 
 	auto timerHeight = getHeight() - borderThickness - padding * 2;
 	timerView.setBounds(padding, padding, timerHeight * 5, timerHeight);
+}
+
+const MixHeaderView::ButtonStates& MixHeaderView::getButtonStates()
+{
+	return lastState;
+}
+
+void MixHeaderView::buttonClicked(juce::Button* button)
+{
+	lastState = ButtonStates(backButton == button,
+							  rewindButton == button,
+							  playPauseButton == button && !isPauseToggled,
+							  playPauseButton == button && isPauseToggled,
+							  fastForwardButton == button,
+							  nextButton == button,
+							  stopButton == button,
+							  recordButton == button);
+
+	if (button == playPauseButton)
+	{
+		if (!isPauseToggled)
+			playPauseButton->setButtonText("PAUSE");
+		else
+			playPauseButton->setButtonText("PLAY");
+
+		isPauseToggled = !isPauseToggled;
+	}
+	else if (button == stopButton)
+	{
+		playPauseButton->setButtonText("PLAY");
+		isPauseToggled = false;
+	}
+
+	notifyObservers();
 }

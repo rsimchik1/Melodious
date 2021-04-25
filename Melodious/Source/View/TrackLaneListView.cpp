@@ -29,9 +29,18 @@ void TrackLaneListView::paint(juce::Graphics& g)
 {
 	g.fillAll(getLookAndFeel().findColour(backgroundColourId));
 
-	g.setColour(getLookAndFeel().findColour(majorLineColourId));
-	for (auto x = fmod(-scrollXAmount,  lineSpacing); x < getWidth(); x += lineSpacing)
+	float measureSpacing = numSubdivisions * lineSpacing;
+	for (auto x = fmod(-scrollXAmount, measureSpacing); x < getWidth(); x += measureSpacing)
+	{
+		g.setColour(findColour(majorLineColourId));
 		g.drawVerticalLine(x, 0, getHeight());
+		for (auto sub = 1; sub < numSubdivisions; sub++)
+		{
+			auto xi = x + (measureSpacing / numSubdivisions) * sub;
+			g.setColour(findColour(minorLineColourId));
+			g.drawVerticalLine(xi, 0, getHeight());
+		}
+	}
 }
 
 void TrackLaneListView::resized()
@@ -64,12 +73,14 @@ void TrackLaneListView::resized()
 	}
 }
 
-void TrackLaneListView::appendNewTrackLane()
+TrackLaneView* TrackLaneListView::appendNewTrackLane()
 {
 	auto *newLane = new TrackLaneView();
 	newLane->setLookAndFeel(&getLookAndFeel());
 	children.push_back(newLane);
 	addAndMakeVisible(newLane);
+	resized();
+	return newLane;
 }
 
 TrackLaneView* TrackLaneListView::getTrackLaneAt(int index)
@@ -130,14 +141,28 @@ float TrackLaneListView::getContentWidth()
 	return width;
 }
 
+void TrackLaneListView::setSubdivisionWidth(float widthPixels)
+{
+	lineSpacing = widthPixels;
+}
+
+void TrackLaneListView::setNumSubdivisions(int subdivisions)
+{
+	this->numSubdivisions = subdivisions;
+}
+
 void TrackLaneListView::calculateScrollXBounds()
 {
 	scrollXBounds.first = 0;
-	scrollXBounds.second = getContentWidth() - getWidth();
+	scrollXBounds.second = getContentWidth() > getWidth() ? 
+		getContentWidth() - getWidth() :
+		0;
 }
 
 void TrackLaneListView::calculateScrollYBounds()
 {
 	scrollYBounds.first = 0;
-	scrollYBounds.second = getContentHeight() - getHeight();
+	scrollYBounds.second = getContentHeight() > getHeight() ? 
+		getContentHeight() - getHeight() :
+		0;
 }

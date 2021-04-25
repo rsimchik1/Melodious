@@ -18,8 +18,8 @@ public:
 	enum DefaultColours
 	{
 		defaultBackgroundColour = 0xff030b47,
-		defaultMajorLineColour = 0xff737795,
-		defaultMinorLineColour = 0xff737795
+		defaultMajorLineColour = 0xffc5c8de,
+		defaultMinorLineColour = 0xff747896
 	};
 
 	TrackLaneListView();
@@ -28,7 +28,7 @@ public:
 	void paint(juce::Graphics& g) override;
 	void resized() override;
 
-	void appendNewTrackLane();
+	TrackLaneView* appendNewTrackLane();
 	TrackLaneView* getTrackLaneAt(int index);
 
 	void scrollX(float deltaX) override;
@@ -37,6 +37,8 @@ public:
 	void setScrollY(float y) override;
 	float getContentHeight() override;
 	float getContentWidth() override;
+	void setSubdivisionWidth(float widthPixels);
+	void setNumSubdivisions(int subdivisions);
 private:
 	std::vector<TrackLaneView*> children;
 
@@ -46,6 +48,7 @@ private:
 	float scrollYAmount;
 	std::pair<float, float> scrollXBounds;
 	std::pair<float, float> scrollYBounds;
+	int numSubdivisions;
 
 	void calculateScrollXBounds();
 	void calculateScrollYBounds();

@@ -16,12 +16,12 @@ int Timeline::getSampleRate() const
 	return sampleRate;
 }
 
-uint32_t Timeline::getPlaybackHead() const
+uint64_t Timeline::getPlaybackHead() const
 {
 	return playbackLocation;
 }
 
-void Timeline::movePlaybackHead(uint32_t newLocation)
+void Timeline::movePlaybackHead(uint64_t newLocation)
 {
 	playbackLocation = newLocation;
 }

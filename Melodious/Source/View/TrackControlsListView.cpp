@@ -55,7 +55,19 @@ void TrackControlsListView::resized()
 
 void TrackControlsListView::buttonClicked(juce::Button*)
 {
-    notifyObservers();
+    auto chooser = juce::FileChooser("Choose an audio file.",
+                                     juce::File(),
+                                     "*.wav;*.aif;*.mp3;*.ogg;*.flac");
+
+    if (chooser.browseForMultipleFilesToOpen())
+    {
+        for (auto f : chooser.getResults())
+        {
+            loadedFiles.push_back(f);
+        }
+
+		notifyObservers();
+    }
 }
 
 TrackControlsView* TrackControlsListView::appendNewTrackControls()
@@ -76,6 +88,11 @@ TrackControlsView* TrackControlsListView::appendNewTrackControls()
 TrackControlsView* TrackControlsListView::getTrackAt(int index)
 {
     return children[index];
+}
+
+std::vector<juce::File> TrackControlsListView::getLoadedFiles()
+{
+    return loadedFiles;
 }
 
 // can't scroll X

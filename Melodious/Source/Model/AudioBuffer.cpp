@@ -5,6 +5,15 @@
 #include "../Exceptions/IndexOutOfBoundsException.h"
 #include "../Exceptions/InvalidArgumentException.h"
 
+float AudioBuffer::clipSample(float sample)
+{
+	if (sample > 1.0f)
+		sample = 1.0f;
+	if (sample < -1.0f)
+		sample = -1.0f;
+	return sample;
+}
+
 AudioBuffer::AudioBuffer(int numFrames, int numChannels)
 {
 	if (numFrames <= 0 || numChannels <= 0)
@@ -62,8 +71,8 @@ void AudioBuffer::writeSampleAt(int frameIndex, int channelIndex, float sample)
 {
 	if (!isFrameInBounds(frameIndex) || !isChannelInBounds(channelIndex))
 		throw IndexOutOfBoundsException();
-	if (!isSampleValid(sample))
-		throw InvalidSampleException();
+	
+	sample = clipSample(sample);
 
 	samples[getSampleIndex(frameIndex, channelIndex)] = sample;
 }
@@ -79,7 +88,7 @@ void AudioBuffer::addBuffer(const AudioBuffer& otherBuffer)
 	{
 		for (int i = 0; i < numFrames * numChannels; i++)
 		{
-			this->samples[i] += otherBuffer.samples[i];
+			this->samples[i] = clipSample(this->samples[i] + otherBuffer.samples[i]);
 		}
 	}
 }
