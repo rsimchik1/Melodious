@@ -2,18 +2,176 @@
 
 <JUCERPROJECT id="W4DsqV" name="Melodious" projectType="guiapp" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="0" jucerFormatVersion="1"
-              version="0.1">
+              version="0.1" cppLanguageStandard="latest">
   <MAINGROUP id="gpzsIS" name="Melodious">
     <GROUP id="{1587D472-40C7-1A79-0501-4F9CF5E29BAA}" name="Source">
+      <GROUP id="{94FD6537-B823-A649-5FBB-F4B0A084400B}" name="Resources">
+        <GROUP id="{0601CF6E-CA71-4FB0-6F94-6F683F7915CB}" name="fonts">
+          <FILE id="PA4cAz" name="PragatiNarrow-Bold.ttf" compile="0" resource="1"
+                file="Source/Resources/fonts/PragatiNarrow-Bold.ttf"/>
+          <FILE id="kLVsrM" name="PragatiNarrow-Regular.ttf" compile="0" resource="1"
+                file="Source/Resources/fonts/PragatiNarrow-Regular.ttf"/>
+          <FILE id="ynTv5L" name="Alata-Regular.ttf" compile="0" resource="1"
+                file="Source/Resources/fonts/Alata-Regular.ttf"/>
+        </GROUP>
+        <GROUP id="{DBA2A9C7-C7CC-9212-8621-1B9BEAF3DE2F}" name="img">
+          <FILE id="Tfkdq3" name="back-button.png" compile="0" resource="1" file="Source/Resources/img/back-button.png"/>
+          <FILE id="SYJ9Zo" name="ff-button.png" compile="0" resource="1" file="Source/Resources/img/ff-button.png"/>
+          <FILE id="fcN4TG" name="fr-button.png" compile="0" resource="1" file="Source/Resources/img/fr-button.png"/>
+          <FILE id="o8ohyi" name="icon-large.png" compile="0" resource="1" file="Source/Resources/img/icon-large.png"/>
+          <FILE id="xyP5C0" name="icon-large-solid.png" compile="0" resource="1"
+                file="Source/Resources/img/icon-large-solid.png"/>
+          <FILE id="b48gau" name="icon-small.png" compile="0" resource="1" file="Source/Resources/img/icon-small.png"/>
+          <FILE id="h5EihK" name="next-button.png" compile="0" resource="1" file="Source/Resources/img/next-button.png"/>
+          <FILE id="GjD8Sp" name="pause-button.png" compile="0" resource="1"
+                file="Source/Resources/img/pause-button.png"/>
+          <FILE id="zNj02g" name="play-button.png" compile="0" resource="1" file="Source/Resources/img/play-button.png"/>
+          <FILE id="Yv1ygc" name="record-button.png" compile="0" resource="1"
+                file="Source/Resources/img/record-button.png"/>
+          <FILE id="jtFOvJ" name="stop-button.png" compile="0" resource="1" file="Source/Resources/img/stop-button.png"/>
+        </GROUP>
+      </GROUP>
+      <GROUP id="{2394106B-8DBA-DD75-BD50-C3A9F8E105DC}" name="Controller">
+        <FILE id="ekO0wh" name="ClipController.cpp" compile="1" resource="0"
+              file="Source/Controller/ClipController.cpp"/>
+        <FILE id="JmHNAc" name="ClipController.h" compile="0" resource="0"
+              file="Source/Controller/ClipController.h"/>
+        <FILE id="qmG1K7" name="Observable.h" compile="0" resource="0" file="Source/Controller/Observable.h"/>
+        <FILE id="Vebe7x" name="Observer.h" compile="0" resource="0" file="Source/Controller/Observer.h"/>
+        <FILE id="ubNUWl" name="TrackController.cpp" compile="1" resource="0"
+              file="Source/Controller/TrackController.cpp"/>
+        <FILE id="SbY6v9" name="TrackController.h" compile="0" resource="0"
+              file="Source/Controller/TrackController.h"/>
+        <FILE id="qgk44W" name="TrackListController.cpp" compile="1" resource="0"
+              file="Source/Controller/TrackListController.cpp"/>
+        <FILE id="imphJe" name="TrackListController.h" compile="0" resource="0"
+              file="Source/Controller/TrackListController.h"/>
+        <FILE id="xqq4kT" name="TransportController.cpp" compile="1" resource="0"
+              file="Source/Controller/TransportController.cpp"/>
+        <FILE id="HPU3A7" name="TransportController.h" compile="0" resource="0"
+              file="Source/Controller/TransportController.h"/>
+      </GROUP>
+      <GROUP id="{896A6F2C-F571-4457-91FB-DAD347E24D15}" name="Exceptions">
+        <FILE id="z58aM3" name="FileAccessException.h" compile="0" resource="0"
+              file="Source/Exceptions/FileAccessException.h"/>
+        <FILE id="fmPegA" name="FileFormatException.h" compile="0" resource="0"
+              file="Source/Exceptions/FileFormatException.h"/>
+        <FILE id="vyrC28" name="IndexOutOfBoundsException.h" compile="0" resource="0"
+              file="Source/Exceptions/IndexOutOfBoundsException.h"/>
+        <FILE id="QmXXv9" name="InvalidArgumentException.h" compile="0" resource="0"
+              file="Source/Exceptions/InvalidArgumentException.h"/>
+        <FILE id="wwda2L" name="InvalidBufferException.h" compile="0" resource="0"
+              file="Source/Exceptions/InvalidBufferException.h"/>
+        <FILE id="foQiNA" name="InvalidChannelTreeException.h" compile="0"
+              resource="0" file="Source/Exceptions/InvalidChannelTreeException.h"/>
+        <FILE id="JglOfm" name="InvalidFrameException.h" compile="0" resource="0"
+              file="Source/Exceptions/InvalidFrameException.h"/>
+        <FILE id="TqVVxY" name="InvalidSampleException.h" compile="0" resource="0"
+              file="Source/Exceptions/InvalidSampleException.h"/>
+      </GROUP>
+      <GROUP id="{7BAA0749-BD53-0F9B-2B42-B1067071DA9B}" name="Model">
+        <FILE id="JBFMNP" name="AudioBuffer.cpp" compile="1" resource="0" file="Source/Model/AudioBuffer.cpp"/>
+        <FILE id="toNlOD" name="AudioBuffer.h" compile="0" resource="0" file="Source/Model/AudioBuffer.h"/>
+        <FILE id="YOtEZa" name="AudioClip.cpp" compile="1" resource="0" file="Source/Model/AudioClip.cpp"/>
+        <FILE id="IcaYP1" name="AudioClip.h" compile="0" resource="0" file="Source/Model/AudioClip.h"/>
+        <FILE id="ZlI3Rw" name="AudioClipReader.cpp" compile="1" resource="0"
+              file="Source/Model/AudioClipReader.cpp"/>
+        <FILE id="TCkV7J" name="AudioClipReader.h" compile="0" resource="0"
+              file="Source/Model/AudioClipReader.h"/>
+        <FILE id="Z8MEuC" name="AudioFrame.cpp" compile="1" resource="0" file="Source/Model/AudioFrame.cpp"/>
+        <FILE id="Akfi7n" name="AudioFrame.h" compile="0" resource="0" file="Source/Model/AudioFrame.h"/>
+        <FILE id="n31Ohb" name="AudioNode.h" compile="0" resource="0" file="Source/Model/AudioNode.h"/>
+        <FILE id="IEQu1a" name="Channel.cpp" compile="1" resource="0" file="Source/Model/Channel.cpp"/>
+        <FILE id="D2HGNn" name="Channel.h" compile="0" resource="0" file="Source/Model/Channel.h"/>
+        <FILE id="WyFF0s" name="ChannelMixer.cpp" compile="1" resource="0"
+              file="Source/Model/ChannelMixer.cpp"/>
+        <FILE id="Z6e78v" name="ChannelMixer.h" compile="0" resource="0" file="Source/Model/ChannelMixer.h"/>
+        <FILE id="pEVeQf" name="ChannelModifiers.cpp" compile="1" resource="0"
+              file="Source/Model/ChannelModifiers.cpp"/>
+        <FILE id="BN1eYh" name="ChannelModifiers.h" compile="0" resource="0"
+              file="Source/Model/ChannelModifiers.h"/>
+        <FILE id="CdHpKM" name="Clip.cpp" compile="1" resource="0" file="Source/Model/Clip.cpp"/>
+        <FILE id="BAVgk6" name="Clip.h" compile="0" resource="0" file="Source/Model/Clip.h"/>
+        <FILE id="dYqd58" name="ClipReader.cpp" compile="1" resource="0" file="Source/Model/ClipReader.cpp"/>
+        <FILE id="STDiS2" name="ClipReader.h" compile="0" resource="0" file="Source/Model/ClipReader.h"/>
+        <FILE id="Gx4b8r" name="LeafChannel.cpp" compile="1" resource="0" file="Source/Model/LeafChannel.cpp"/>
+        <FILE id="pGkZ33" name="LeafChannel.h" compile="0" resource="0" file="Source/Model/LeafChannel.h"/>
+        <FILE id="hXQyJz" name="Meter.cpp" compile="1" resource="0" file="Source/Model/Meter.cpp"/>
+        <FILE id="RWzyUn" name="Meter.h" compile="0" resource="0" file="Source/Model/Meter.h"/>
+        <FILE id="Lox0dS" name="NodeChannel.cpp" compile="1" resource="0" file="Source/Model/NodeChannel.cpp"/>
+        <FILE id="o2lJNe" name="NodeChannel.h" compile="0" resource="0" file="Source/Model/NodeChannel.h"/>
+        <FILE id="yqgVdS" name="OscClip.cpp" compile="1" resource="0" file="Source/Model/OscClip.cpp"/>
+        <FILE id="UvtQaL" name="OscClip.h" compile="0" resource="0" file="Source/Model/OscClip.h"/>
+        <FILE id="JgOOMt" name="OscClipReader.cpp" compile="1" resource="0"
+              file="Source/Model/OscClipReader.cpp"/>
+        <FILE id="yLMAue" name="OscClipReader.h" compile="0" resource="0" file="Source/Model/OscClipReader.h"/>
+        <FILE id="UDCfQs" name="Timeline.cpp" compile="1" resource="0" file="Source/Model/Timeline.cpp"/>
+        <FILE id="huhkMo" name="Timeline.h" compile="0" resource="0" file="Source/Model/Timeline.h"/>
+        <FILE id="HmGtW8" name="Track.cpp" compile="1" resource="0" file="Source/Model/Track.cpp"/>
+        <FILE id="EkzmZk" name="Track.h" compile="0" resource="0" file="Source/Model/Track.h"/>
+      </GROUP>
+      <GROUP id="{85F7DEA8-BF7B-FA30-CD2B-6306B2475932}" name="View">
+        <FILE id="KYehU0" name="AddTrackView.cpp" compile="1" resource="0"
+              file="Source/View/AddTrackView.cpp"/>
+        <FILE id="QaPyEY" name="AddTrackView.h" compile="0" resource="0" file="Source/View/AddTrackView.h"/>
+        <FILE id="LpT3QS" name="ArrangementView.cpp" compile="1" resource="0"
+              file="Source/View/ArrangementView.cpp"/>
+        <FILE id="hP2h29" name="ArrangementView.h" compile="0" resource="0"
+              file="Source/View/ArrangementView.h"/>
+        <FILE id="vkWpDL" name="ButtonLookAndFeel.cpp" compile="1" resource="0"
+              file="Source/View/ButtonLookAndFeel.cpp"/>
+        <FILE id="pBpLNg" name="ButtonLookAndFeel.h" compile="0" resource="0"
+              file="Source/View/ButtonLookAndFeel.h"/>
+        <FILE id="jnBU2u" name="ClipView.cpp" compile="1" resource="0" file="Source/View/ClipView.cpp"/>
+        <FILE id="yRZJWW" name="ClipView.h" compile="0" resource="0" file="Source/View/ClipView.h"/>
+        <FILE id="S2jYfp" name="FooterView.cpp" compile="1" resource="0" file="Source/View/FooterView.cpp"/>
+        <FILE id="JUU6H5" name="FooterView.h" compile="0" resource="0" file="Source/View/FooterView.h"/>
+        <FILE id="TSvQjL" name="MainComponent.cpp" compile="1" resource="0"
+              file="Source/View/MainComponent.cpp"/>
+        <FILE id="sZsO7w" name="MainComponent.h" compile="0" resource="0" file="Source/View/MainComponent.h"/>
+        <FILE id="H7IVTL" name="MixHeaderView.cpp" compile="1" resource="0"
+              file="Source/View/MixHeaderView.cpp"/>
+        <FILE id="feDQfP" name="MixHeaderView.h" compile="0" resource="0" file="Source/View/MixHeaderView.h"/>
+        <FILE id="zyBYlv" name="PlayheadView.cpp" compile="1" resource="0"
+              file="Source/View/PlayheadView.cpp"/>
+        <FILE id="CHbuoi" name="PlayheadView.h" compile="0" resource="0" file="Source/View/PlayheadView.h"/>
+        <FILE id="OAL0Wh" name="ScrollableContent.h" compile="0" resource="0"
+              file="Source/View/ScrollableContent.h"/>
+        <FILE id="x7tpgo" name="TimelineView.cpp" compile="1" resource="0"
+              file="Source/View/TimelineView.cpp"/>
+        <FILE id="AXxpx5" name="TimelineView.h" compile="0" resource="0" file="Source/View/TimelineView.h"/>
+        <FILE id="vJZGPr" name="TimerView.cpp" compile="1" resource="0" file="Source/View/TimerView.cpp"/>
+        <FILE id="kklcyG" name="TimerView.h" compile="0" resource="0" file="Source/View/TimerView.h"/>
+        <FILE id="VXoL3E" name="TrackControlsListView.cpp" compile="1" resource="0"
+              file="Source/View/TrackControlsListView.cpp"/>
+        <FILE id="rf1VdZ" name="TrackControlsListView.h" compile="0" resource="0"
+              file="Source/View/TrackControlsListView.h"/>
+        <FILE id="DQTKY5" name="TrackControlsView.cpp" compile="1" resource="0"
+              file="Source/View/TrackControlsView.cpp"/>
+        <FILE id="XKsnCo" name="TrackControlsView.h" compile="0" resource="0"
+              file="Source/View/TrackControlsView.h"/>
+        <FILE id="Qui6WQ" name="TrackLaneListView.cpp" compile="1" resource="0"
+              file="Source/View/TrackLaneListView.cpp"/>
+        <FILE id="YgBo9U" name="TrackLaneListView.h" compile="0" resource="0"
+              file="Source/View/TrackLaneListView.h"/>
+        <FILE id="cmpEae" name="TrackLaneView.cpp" compile="1" resource="0"
+              file="Source/View/TrackLaneView.cpp"/>
+        <FILE id="gvzTS6" name="TrackLaneView.h" compile="0" resource="0" file="Source/View/TrackLaneView.h"/>
+      </GROUP>
+      <GROUP id="{C4102BD6-5783-5A9C-2619-58844DBFAAD3}" name="Utils">
+        <FILE id="CDslVb" name="AudioFile.cpp" compile="1" resource="0" file="Source/Utils/AudioFile.cpp"/>
+        <FILE id="IYMlrQ" name="AudioFile.h" compile="0" resource="0" file="Source/Utils/AudioFile.h"/>
+        <FILE id="u4MMBp" name="File.cpp" compile="1" resource="0" file="Source/Utils/File.cpp"/>
+        <FILE id="pT7jTT" name="File.h" compile="0" resource="0" file="Source/Utils/File.h"/>
+        <FILE id="T199q2" name="FileManager.cpp" compile="1" resource="0" file="Source/Utils/FileManager.cpp"/>
+        <FILE id="htUX0c" name="FileManager.h" compile="0" resource="0" file="Source/Utils/FileManager.h"/>
+      </GROUP>
       <FILE id="v7W1nU" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
-      <FILE id="lNDBsF" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
-      <FILE id="Z5xo1q" name="MainComponent.cpp" compile="1" resource="0"
-            file="Source/MainComponent.cpp"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1"/>
   <EXPORTFORMATS>
-    <VS2019 targetFolder="Builds/VisualStudio2019">
+    <VS2019 targetFolder="Builds/VisualStudio2019" smallIcon="b48gau" bigIcon="o8ohyi">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="1" name="Debug" targetName="Melodious"/>
         <CONFIGURATION isDebug="0" name="Release" targetName="Melodious"/>

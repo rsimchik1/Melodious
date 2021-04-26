@@ -1,7 +1,8 @@
 #include "FooterView.h"
 
 FooterView::FooterView()
-	: logoImage(juce::ImageFileFormat::loadFrom(juce::File(logoPath)))
+	: logoImage(juce::ImageFileFormat::loadFrom(BinaryData::iconlarge_png, 
+												BinaryData::iconlarge_pngSize))
 {
 	setColour(backgroundColourId, juce::Colour(defaultBackgroundColour));
 	setColour(borderColourId, juce::Colour(defaultBorderColour));

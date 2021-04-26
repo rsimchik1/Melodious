@@ -1,17 +1,21 @@
 #include "TimelineView.h"
 
 TimelineView::TimelineView()
+	: measureSizePixels(70),
+	subdivideBy(2),
+	numSubdivisions(2),
+	minSpacingPixels(10),
+	paddingPixels(10),
+	borderThickness(2),
+	spacerWidth(0),
+	spacerBorderThickness(2),
+	minScrollX(0),
+	scrollXAmount(minScrollX)
 {
-	this->minSpacingPixels = 10;
-	this->subdivideBy = 2;
-	this->numSubdivisions = 2;
-	this->measureSizePixels = 70;
-	this->paddingPixels = 10;
-	this->borderThickness = 2;
-	this->minScrollX = 0;
-	this->scrollXAmount = minScrollX;
-	this->spacerWidth = 0;
-	this->spacerBorderThickness = 2;
+	measureTextFont = juce::Font(juce::Typeface::createSystemTypefaceFor(
+		BinaryData::AlataRegular_ttf,
+		BinaryData::AlataRegular_ttfSize));
+
 	setSubdivisionWidth(20);
 
 	getLookAndFeel().setColour(backgroundColourId, juce::Colour(defaultBackgroundColour));
@@ -31,9 +35,9 @@ void TimelineView::paint(juce::Graphics& g)
 	g.fillAll(getLookAndFeel().findColour(backgroundColourId));
 
 	// Measure text and major ticks
-	auto xOffset = paddingPixels / 3;
-	auto yOffset = paddingPixels / 2 + borderThickness;
-	auto measureTextFont = juce::Font("Calibri Light", getHeight() - (paddingPixels * 5/3), juce::Font::plain);
+	const auto xOffset = paddingPixels / 3;
+	const auto yOffset = paddingPixels / 2 + borderThickness;
+	measureTextFont.setHeight(getHeight() - yOffset);
 	g.setFont(measureTextFont);
 	int i = (scrollXAmount / measureSizePixels) + 1;
 	for (auto x = fmod(-scrollXAmount, measureSizePixels); x < getWidth() - spacerWidth; x+=measureSizePixels)
@@ -49,9 +53,11 @@ void TimelineView::paint(juce::Graphics& g)
 		for (auto sub = 1; sub < numSubdivisions * subdivideBy; sub++)
 		{
 			auto xi = x + (measureSizePixels / (numSubdivisions * subdivideBy)) * sub;
+			const auto subYOffset = (yOffset - borderThickness) / 2.0f + borderThickness;
 			if (xi > getWidth() - spacerWidth) break;
 			g.setColour(getLookAndFeel().findColour(minorLineColourId));
-			g.drawVerticalLine(xi, getHeight() - yOffset, getHeight());
+			g.drawVerticalLine(xi, getHeight() - subYOffset, 
+							   getHeight());
 		}
 
 		i++;

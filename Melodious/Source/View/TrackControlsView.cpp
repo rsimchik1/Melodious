@@ -4,13 +4,21 @@ TrackControlsView::TrackControlsView()
 {
     setColour(backgroundColourId, juce::Colour(defaultBackgroundColour));
     setColour(borderColourId, juce::Colour(defaultBorderColour));
+
+    font = juce::Font(juce::Typeface::createSystemTypefaceFor(
+        BinaryData::AlataRegular_ttf,
+        BinaryData::AlataRegular_ttfSize));
+    font.setHeight(controlsSize);
 	
     volumeLookAndFeel = new VolumeLookAndFeel();
-    volumeSlider.setRange(0, 1.2);
-    volumeSlider.setValue(1);
+    volumeSlider.setRange(-96, 10);
+    volumeSlider.setValue(0);
     volumeSlider.setLookAndFeel(volumeLookAndFeel);
     volumeSlider.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     volumeSlider.addListener(this);
+    volumeSlider.setPopupDisplayEnabled(true, true, this);
+    volumeSlider.setNumDecimalPlacesToDisplay(0);
+    volumeSlider.snapValue(0.0, juce::Slider::DragMode::absoluteDrag);
     addAndMakeVisible(volumeSlider);
 
     panLookAndFeel = new PanLookAndFeel();
@@ -19,9 +27,10 @@ TrackControlsView::TrackControlsView()
     panSlider.setLookAndFeel(panLookAndFeel);
     panSlider.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     panSlider.addListener(this);
+    panSlider.snapValue(0.0, juce::Slider::DragMode::absoluteDrag);
     addAndMakeVisible(panSlider);
 
-    title.setFont(juce::Font("Arial", controlsSize, juce::Font::FontStyleFlags::plain));
+    title.setFont(font);
     title.setText(getName(), juce::NotificationType::dontSendNotification);
     title.setEditable(false, true, true);
     title.addListener(this);
@@ -101,6 +110,8 @@ void TrackControlsView::resized()
     auto titleBounds = paddedBounds;
     titleBounds.removeFromBottom(paddedBounds.getHeight() - controlsSize);
     titleBounds.removeFromRight(controlsSize);
+    font.setHeight(titleBounds.getHeight());
+    title.setFont(font);
     title.setBounds(titleBounds);
 
     juce::Rectangle<int> soloButtonBounds;
@@ -141,7 +152,7 @@ void TrackControlsView::sliderValueChanged(juce::Slider* slider)
 
 float TrackControlsView::getVolume()
 {
-    return volumeSlider.getValue();
+    return juce::Decibels::decibelsToGain(volumeSlider.getValue(), -96.0);
 }
 
 float TrackControlsView::getPan()
@@ -213,6 +224,10 @@ TrackControlsView::PanLookAndFeel::PanLookAndFeel()
 {
     setColour(juce::Slider::backgroundColourId, juce::Colour(defaultBackgroundColour));
     setColour(juce::Slider::thumbColourId, juce::Colour(defaultThumbColour));
+
+    font = juce::Font(juce::Typeface::createSystemTypefaceFor(
+        BinaryData::AlataRegular_ttf,
+        BinaryData::AlataRegular_ttfSize));
 }
 
 void TrackControlsView::PanLookAndFeel::drawLinearSliderThumb(juce::Graphics& g, int x, int y, int width, int height,
@@ -238,7 +253,8 @@ void TrackControlsView::PanLookAndFeel::drawLinearSliderBackground(juce::Graphic
     g.fillRect(x, rectY, width, rectH);
 
     auto fontY = centerLine + trackThickness / 2;
-    g.setFont(juce::Font("Calibri", fontSize, juce::Font::plain));
+    font.setHeight(fontSize);
+    g.setFont(font);
     g.drawText("L", x - fontSize/2, fontY, fontSize, fontSize, juce::Justification::left);
     g.drawText("R", x + width - fontSize/2, fontY, fontSize, fontSize, juce::Justification::right);
     g.drawText("|", x + width / 2 - fontSize / 2, fontY, fontSize, fontSize, juce::Justification::centred);

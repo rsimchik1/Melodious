@@ -25,9 +25,7 @@ public:
 	void paint(juce::Graphics& g) override;
 	void resized() override;
 private:
-	const std::string logoPath = "D:/Documents/dev/Melodious/Melodious/Source/img/logo.png";
-
-	int padding = 2;
+	int padding = 10;
 	int borderThickness = 4;
 	
 	juce::Image logoImage;

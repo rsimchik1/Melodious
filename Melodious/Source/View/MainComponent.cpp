@@ -37,6 +37,7 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     this->sampleRate = sampleRate;
     timeline = Timeline(sampleRate);
     arrangementView.setSampleRate(sampleRate);
+    mixHeaderView.setTimeline(timeline);
 }
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
@@ -52,6 +53,7 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
             break;
         case TransportController::StartPlay:
             currentState = TransportController::Playing;
+            getNextAudioBlock(bufferToFill);
             break;
         case TransportController::Stopping:
             timeline.movePlaybackHead(0);
@@ -60,9 +62,32 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
         case TransportController::Stopped:
             break;
         case TransportController::Pausing:
-            currentState = TransportController::Paused;
+            currentState = TransportController::Stopped;
+            break;
+        case TransportController::Rewinding:
+        {
+            auto offset = numFrames * scrubSpeed;
+            if (timeline.getPlaybackHead() < offset)
+                offset = timeline.getPlaybackHead();
+            timeline.shiftPlaybackHead(-offset);
+        }
+            break;
+        case TransportController::FastForwarding:
+            timeline.shiftPlaybackHead(numFrames * scrubSpeed);
+            break;
+        case TransportController::GoingBack:
+        {
+            timeline.movePlaybackHead(0);
+            currentState = lastState;
+            getNextAudioBlock(bufferToFill);
+        }
+        case TransportController::StartRecord:
+            currentState = TransportController::Playing;    // TODO change this when implementing recording
+            getNextAudioBlock(bufferToFill);
             break;
     }
+    lastState = currentState;
+
 	for (int sample = 0; sample < numFrames; sample++)
 	{
 		for (int channel = 0; channel < numChannels; channel++)

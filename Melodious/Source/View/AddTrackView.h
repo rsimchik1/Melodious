@@ -29,5 +29,5 @@ public:
 	AddButtonLookAndFeel();
 	juce::Font getTextButtonFont(juce::TextButton&, int buttonHeight) override;
 private:
-	int fontSize = 20;
+	int fontSize = 35;
 };

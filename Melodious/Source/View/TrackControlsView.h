@@ -43,6 +43,8 @@ private:
     class VolumeLookAndFeel;
     class PanLookAndFeel;
 
+    juce::Font font;
+
     juce::Slider volumeSlider;
     juce::Slider panSlider;
     juce::Label title;
@@ -74,9 +76,6 @@ public:
 		defaultGradientColour = 0xff06d2ff
     };
 
-    int innerPaddingPixels = 2;
-    int outerPaddingPixels = 3;
-
     VolumeLookAndFeel();
 	void drawLinearSliderThumb(juce::Graphics&, int x, int y, int width, int height, float sliderPos,
 		float minSliderPos, float maxSliderPos, const juce::Slider::SliderStyle, juce::Slider&) override;
@@ -86,6 +85,9 @@ public:
 		float maxSliderPos, const juce::Slider::SliderStyle, juce::Slider&) override;
     juce::Rectangle<float> getAdjustedThumbBounds(int x, int y, int width, int height, float sliderPos,
         float minSliderPos, float maxSliderPos);
+private:
+    int innerPaddingPixels = 2;
+    int outerPaddingPixels = 3;
 };
 
 class TrackControlsView::PanLookAndFeel : public juce::LookAndFeel_V4
@@ -100,6 +102,8 @@ public:
     int trackThickness = 6;
     int thumbThickness = 10;
     int fontSize = 15;
+
+	juce::Font font;
 
     PanLookAndFeel();
 

@@ -6,78 +6,63 @@ TimerView::TimerView()
 	setColour(borderColourId, juce::Colour(defaultBorderColour));
 	setColour(textColourId, juce::Colour(defaultTextColour));
 
-	auto font = juce::Font("Alata", 20, juce::Font::FontStyleFlags::plain);
+	mainFont = juce::Font(juce::Typeface::createSystemTypefaceFor(
+		BinaryData::AlataRegular_ttf,
+		BinaryData::AlataRegular_ttfSize));
 
 	beatText.setEditable(true);
-	beatText.setFont(font);
-	beatText.setColour(juce::Label::textColourId, findColour(textColourId));
-	beatText.setJustificationType(juce::Justification::centred);
-	addAndMakeVisible(beatText);
+	allLabels.push_back(&beatText);
 	tempoText.setEditable(true);
-	tempoText.setFont(font);
-	tempoText.setColour(juce::Label::textColourId, findColour(textColourId));
-	tempoText.setJustificationType(juce::Justification::centred);
-	addAndMakeVisible(tempoText);
+	allLabels.push_back(&tempoText);
 	meterTopText.setEditable(true);
-	meterTopText.setFont(font);
-	meterTopText.setColour(juce::Label::textColourId, findColour(textColourId));
-	meterTopText.setJustificationType(juce::Justification::centred);
-	addAndMakeVisible(meterTopText);
+	allLabels.push_back(&meterTopText);
 	meterBottomText.setEditable(true);
-	meterBottomText.setFont(font);
-	meterBottomText.setColour(juce::Label::textColourId, findColour(textColourId));
-	meterBottomText.setJustificationType(juce::Justification::centred);
-	addAndMakeVisible(meterBottomText);
+	allLabels.push_back(&meterBottomText);
+
 	for (auto i = 0; i < numBarDigits; i++)
 	{
 		barText.push_back(new juce::Label());
 		barText[i]->setEditable(true);
-		barText[i]->setFont(font);
-		barText[i]->setColour(juce::Label::textColourId, findColour(textColourId));
-		barText[i]->setJustificationType(juce::Justification::centred);
-		addAndMakeVisible(barText[i]);
+		allLabels.push_back(barText[i]);
 	}
 
 	barLabel.setEditable(false);
-	barLabel.setFont(font);
 	barLabel.setText("BAR", juce::dontSendNotification);
-	barLabel.setColour(juce::Label::textColourId, findColour(textColourId));
-	barLabel.setJustificationType(juce::Justification::centred);
-	addAndMakeVisible(barLabel);
+	allLabels.push_back(&barLabel);
 	barBeatDot.setEditable(false);
-	barBeatDot.setFont(font);
 	barBeatDot.setText(".", juce::dontSendNotification);
-	barBeatDot.setColour(juce::Label::textColourId, findColour(textColourId));
-	barBeatDot.setJustificationType(juce::Justification::centred);
-	addAndMakeVisible(barBeatDot);
+	allLabels.push_back(&barBeatDot);
 	beatLabel.setEditable(false);
-	beatLabel.setFont(font);
 	beatLabel.setText("BEAT", juce::dontSendNotification);
-	beatLabel.setColour(juce::Label::textColourId, findColour(textColourId));
-	beatLabel.setJustificationType(juce::Justification::centred);
-	addAndMakeVisible(beatLabel);
+	allLabels.push_back(&beatLabel);
 	tempoLabel.setEditable(false);
-	tempoLabel.setFont(font);
 	tempoLabel.setText("TEMPO", juce::dontSendNotification);
-	tempoLabel.setColour(juce::Label::textColourId, findColour(textColourId));
-	tempoLabel.setJustificationType(juce::Justification::centred);
-	addAndMakeVisible(tempoLabel);
+	allLabels.push_back(&tempoLabel);
 	meterLabel.setEditable(false);
-	meterLabel.setFont(font);
 	meterLabel.setText("METER", juce::dontSendNotification);
-	meterLabel.setColour(juce::Label::textColourId, findColour(textColourId));
-	meterLabel.setJustificationType(juce::Justification::centred);
-	addAndMakeVisible(meterSlashText);
+	allLabels.push_back(&meterLabel);
 	meterSlashText.setEditable(false);
-	meterSlashText.setFont(font);
 	meterSlashText.setText("/", juce::dontSendNotification);
-	meterSlashText.setColour(juce::Label::textColourId, findColour(textColourId));
-	meterSlashText.setJustificationType(juce::Justification::centred);
-	addAndMakeVisible(meterSlashText);
+	allLabels.push_back(&meterSlashText);
+
+	for (auto label : allLabels)
+	{
+		label->setColour(juce::Label::textColourId, findColour(textColourId));
+		label->setJustificationType(juce::Justification::verticallyCentred);
+		addAndMakeVisible(label);
+	}
+
+	tempoText.setJustificationType(juce::Justification::centred);
+	barLabel.setJustificationType(juce::Justification::centred);
+	beatLabel.setJustificationType(juce::Justification::centred);
+	tempoLabel.setJustificationType(juce::Justification::centred);
+	meterLabel.setJustificationType(juce::Justification::centred);
 
 	setTempo(120);
 	setMeter(4, 4);
-	setBarAndBeat(1, 1);
+	setBeat(0);
+
+	startTimer(40);
 }
 
 TimerView::~TimerView()
@@ -109,14 +94,21 @@ void TimerView::paint(juce::Graphics& g)
 void TimerView::resized()
 {
 	auto textWidth = (getWidth() * barAndBeatPercentWidth) / 7;
-	juce::Font mainFont("Arial", textWidth*1.5, juce::Font::FontStyleFlags::bold);
-	auto curBounds = juce::Rectangle<int>( 0, 0,
-		textWidth, getHeight());
+	mainFont.setHeight(textWidth*2.5);
+	auto labelWidth = textWidth * 1.5;
+	auto curBounds = juce::Rectangle<int>( 0, borderThickness,
+		labelWidth, getHeight() * (1-labelPercentHeight) - borderThickness);
+	auto textColour = findColour(textColourId);
+	auto thisColour = textColour.withAlpha(0.5f);
 	for (auto i = 0; i < numBarDigits; i++)
 	{
+		if (barText[i]->getText() != "0")
+			thisColour = textColour;
+
 		curBounds.translate(textWidth, 0);
 		barText[i]->setBounds(curBounds);
 		barText[i]->setFont(mainFont);
+		barText[i]->setColour(juce::Label::textColourId, thisColour);
 	}
 	curBounds.translate(textWidth, 0);
 	barBeatDot.setBounds(curBounds);
@@ -131,8 +123,10 @@ void TimerView::resized()
 	tempoText.setFont(mainFont);
 
 	curBounds.setX(getWidth() - (getWidth() * meterPercentWidth));
-	auto increment = (getWidth() * meterPercentWidth) / 5;
-	curBounds.setWidth(textWidth);
+	auto increment = (getWidth() * meterPercentWidth) / 6;
+	labelWidth *= 0.8;
+	mainFont.setHeight(mainFont.getHeight() * 0.8);
+	curBounds.setWidth(labelWidth);
 	curBounds.translate(increment, 0);
 	meterTopText.setBounds(curBounds);
 	meterTopText.setFont(mainFont);
@@ -142,34 +136,79 @@ void TimerView::resized()
 	curBounds.translate(increment, 0);
 	meterBottomText.setBounds(curBounds);
 	meterBottomText.setFont(mainFont);
+
+	mainFont.setHeight(getHeight() * labelPercentHeight);
+	curBounds.setHeight(mainFont.getHeight());
+	curBounds.setY(getHeight() - curBounds.getHeight() - borderThickness * 2);
+	curBounds.setWidth(barText[1]->getWidth());
+	curBounds.setX(barText[1]->getX());
+	barLabel.setFont(mainFont);
+	barLabel.setBounds(curBounds);
+	
+	curBounds.setWidth(beatText.getWidth());
+	curBounds.setX(beatText.getX());
+	beatLabel.setFont(mainFont);
+	beatLabel.setBounds(curBounds);
+
+	curBounds.setWidth(tempoText.getWidth());
+	curBounds.setX(tempoText.getX());
+	tempoLabel.setFont(mainFont);
+	tempoLabel.setBounds(curBounds);
+
+	curBounds.setWidth(meterBottomText.getRight() - meterTopText.getX());
+	curBounds.setX(meterTopText.getX());
+	meterLabel.setFont(mainFont);
+	meterLabel.setBounds(curBounds);
 }
 
 void TimerView::setTempo(unsigned tempo)
 {
 	this->tempo = tempo;
-	tempoText.setText(std::to_string(this->tempo), juce::NotificationType::dontSendNotification);
+	tempoText.setText(std::to_string(this->tempo), juce::NotificationType::sendNotification);
 }
 
 void TimerView::setMeter(unsigned numerator, unsigned denominator)
 {
 	meter.first = numerator;
 	meter.second = denominator;
-	meterTopText.setText(std::to_string(meter.first), juce::NotificationType::dontSendNotification);
-	meterBottomText.setText(std::to_string(meter.second), juce::NotificationType::dontSendNotification);
+	meterTopText.setText(std::to_string(meter.first), juce::NotificationType::sendNotification);
+	meterBottomText.setText(std::to_string(meter.second), juce::NotificationType::sendNotification);
 }
 
 void TimerView::setBarAndBeat(unsigned bar, unsigned beat)
 {
-	barAndBeat.first = bar;
-	barAndBeat.second = beat;
-
 	std::ostringstream padStream;
-	padStream << std::setw(numBarDigits) << std::setfill('0') << bar;
+	padStream << std::setw(numBarDigits) << std::setfill('0') << barAndBeat.first;
 	auto paddedBar = padStream.str();
 	for (auto i = 0; i < numBarDigits; i++)
 	{
-		barText[i]->setText(paddedBar.substr(i, 1), juce::dontSendNotification);
+		barText[i]->setText(paddedBar.substr(i, 1), juce::sendNotification);
 	}
 
-	beatText.setText(std::to_string(beat), juce::dontSendNotification);
+	beatText.setText(std::to_string(barAndBeat.second), juce::sendNotification);
+}
+
+void TimerView::labelTextChanged(juce::Label* labelThatHasChanged)
+{
+	resized();
+}
+
+void TimerView::notify(Timeline* caller)
+{
+	auto samplesPerBeat = caller->getSamplesPerBeat(tempo);
+	auto numSamples = caller->getPlaybackHead();
+	setBeat(numSamples / samplesPerBeat);
+}
+
+void TimerView::timerCallback()
+{
+	if (update)
+		setBarAndBeat(barAndBeat.first, barAndBeat.second);
+}
+
+void TimerView::setBeat(uint64_t beat)
+{
+	barAndBeat.first = beat / meter.second + 1;
+	barAndBeat.second = beat % meter.first + 1;
+	update = true;
 }

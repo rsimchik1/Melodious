@@ -12,13 +12,16 @@ class MixHeaderView : public juce::Component,
 public:
 	struct ButtonStates
 	{
-		ButtonStates(bool back, bool rewind, bool play, bool pause,
-					 bool fastForward, bool next, bool stop, bool record)
+		ButtonStates(bool back, bool rewindOn, bool rewindOff, bool play, 
+					 bool pause, bool fastForwardOn, bool fastForwardOff, 
+					 bool next, bool stop, bool record)
 			: backPressed(back),
-			rewindPressed(rewind),
+			rewindPressed(rewindOn),
+			rewindReleased(rewindOff),
 			playPressed(play),
 			pausePressed(pause),
-			fastForwardPressed(fastForward),
+			fastForwardPressed(fastForwardOn),
+			fastForwardReleased(fastForwardOff),
 			nextPressed(next),
 			stopPressed(stop),
 			recordPressed(record)
@@ -26,9 +29,11 @@ public:
 		
 		bool backPressed;
 		bool rewindPressed;
+		bool rewindReleased;
 		bool playPressed;
 		bool pausePressed;
 		bool fastForwardPressed;
+		bool fastForwardReleased;
 		bool nextPressed;
 		bool stopPressed;
 		bool recordPressed;
@@ -52,23 +57,38 @@ public:
 	void resized() override;
 
 	const ButtonStates& getButtonStates();
-	void buttonClicked(juce::Button*) override;
+	void buttonStateChanged(juce::Button*) override;
+	void setTimeline(Timeline& timeline);
 private:
 	int borderThickness = 4;
 	int padding = 20;
 
-	juce::TextButton* backButton;
-	juce::TextButton* rewindButton;
-	juce::TextButton* playPauseButton;
-	juce::TextButton* fastForwardButton;
-	juce::TextButton* nextButton;
-	juce::TextButton* stopButton;
-	juce::TextButton* recordButton;
+	juce::Image backImage;
+	juce::Image rewindImage;
+	juce::Image playImage;
+	juce::Image pauseImage;
+	juce::Image fastForwardImage;
+	juce::Image nextImage;
+	juce::Image stopImage;
+	juce::Image recordImage;
+	
+	juce::ImageButton* backButton;
+	juce::ImageButton* rewindButton;
+	juce::ImageButton* playPauseButton;
+	juce::ImageButton* fastForwardButton;
+	juce::ImageButton* nextButton;
+	juce::ImageButton* stopButton;
+	juce::ImageButton* recordButton;
 	std::vector<juce::Button*> buttons;
 	juce::DrawableRectangle buttonsBackground;
 
 	TimerView timerView;
 	ButtonLookAndFeel *buttonLookAndFeel;
 	ButtonStates lastState;
-	bool isPauseToggled = false;
+	bool isPaused = false;
+	bool isHoldingRewind = false;
+	bool isHoldingFastForward = false;
+
+	void buttonClicked(juce::Button*) override;
+	void setPlayPauseButtonImage(juce::ImageButton *button, bool isPaused);
 };

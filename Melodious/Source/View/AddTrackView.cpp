@@ -47,5 +47,9 @@ AddTrackView::AddButtonLookAndFeel::AddButtonLookAndFeel()
 
 juce::Font AddTrackView::AddButtonLookAndFeel::getTextButtonFont(juce::TextButton&, int buttonHeight)
 {
-	return juce::Font("Arial", fontSize, juce::Font::FontStyleFlags::bold);
+    auto font = juce::Font(juce::Typeface::createSystemTypefaceFor(
+        BinaryData::AlataRegular_ttf,
+        BinaryData::AlataRegular_ttfSize));
+	font.setHeight(fontSize);
+	return font;
 }

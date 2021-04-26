@@ -26,3 +26,13 @@ void ButtonLookAndFeel::setBorderThickness(int thickness)
 {
 	borderThickness = thickness;
 }
+
+void ButtonLookAndFeel::drawImageButton(juce::Graphics& g, juce::Image* image,
+	int imageX, int imageY, int imageW, int imageH,
+	const juce::Colour& overlayColour, float imageOpacity, juce::ImageButton& button)
+{
+	drawButtonBackground(g, button, findColour(juce::TextButton::buttonColourId),
+						 false, false);
+	LookAndFeel_V4::drawImageButton(g, image, imageX, imageY, imageW, imageH, 
+									overlayColour, imageOpacity, button);
+}

@@ -55,6 +55,8 @@ private:
 	int spacerWidth;
 	int spacerBorderThickness;
 
-	float scrollXAmount;
 	int minScrollX;
+	float scrollXAmount;
+
+	juce::Font measureTextFont;
 };

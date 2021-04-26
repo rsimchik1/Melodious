@@ -1,10 +1,12 @@
 #pragma once
 #include <cstdint>
 
+#include "../Controller/Observable.h"
+
 /**
  * Class that is responsible for keeping time. Time is stored in samples.
  */
-class Timeline
+class Timeline : public Observable<Timeline>
 {
 public:
 	/**

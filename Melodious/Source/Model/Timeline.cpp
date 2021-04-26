@@ -24,6 +24,8 @@ uint64_t Timeline::getPlaybackHead() const
 void Timeline::movePlaybackHead(uint64_t newLocation)
 {
 	playbackLocation = newLocation;
+
+	notifyObservers();
 }
 
 void Timeline::shiftPlaybackHead(int32_t offset)
@@ -33,6 +35,8 @@ void Timeline::shiftPlaybackHead(int32_t offset)
 		throw IndexOutOfBoundsException();
 
 	playbackLocation += offset;
+
+	notifyObservers();
 }
 
 float Timeline::getSamplesPerBeat(float beatsPerMinute)

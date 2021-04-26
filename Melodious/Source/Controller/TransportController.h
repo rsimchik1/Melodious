@@ -16,7 +16,9 @@ public:
 		StartRecord,
 		Recording,
 		Rewinding,
-		FastForwarding
+		FastForwarding,
+		GoingBack,
+		GoingNext
 	};
 
 	TransportController(TransportState* state);
