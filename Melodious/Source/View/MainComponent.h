@@ -4,6 +4,7 @@
 
 #include "../Model/ChannelMixer.h"
 #include "ArrangementView.h"
+#include "FooterView.h"
 #include "MixHeaderView.h"
 #include "../Controller/TransportController.h"
 
@@ -41,7 +42,7 @@ private:
     std::shared_ptr<TrackListController> trackListController;
     ArrangementView arrangementView;
     MixHeaderView mixHeaderView;
-
+    FooterView footerView;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

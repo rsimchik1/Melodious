@@ -32,7 +32,7 @@ void TrackListController::notify(TrackControlsListView* caller)
 		if (file.existsAsFile())
 		{
 			double sourceSampleRate = formatManager.createReaderFor(file)->sampleRate;
-			const double sampleRateScale = 48000.0 / sourceSampleRate;
+			const double sampleRateScale = sampleRate / sourceSampleRate;
 			auto path = file.getFullPathName().toStdString();
 			trackName = std::filesystem::path(path).stem().string();
 			auto handle = fileManager.addExistingFile(path);

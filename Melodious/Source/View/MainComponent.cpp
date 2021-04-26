@@ -17,9 +17,11 @@ MainComponent::MainComponent()
         setAudioChannels (2, 2);
     }
 
-    addAndMakeVisible(arrangementView);
     mixHeaderView.addObserver(std::shared_ptr<TransportController>(&transportController));
+
+    addAndMakeVisible(arrangementView);
     addAndMakeVisible(mixHeaderView);
+    addAndMakeVisible(footerView);
 
     setSize (800, 600);
 }
@@ -86,7 +88,12 @@ void MainComponent::resized()
     headerBounds.setHeight(100);
     mixHeaderView.setBounds(headerBounds);
 
+    auto footerBounds = getLocalBounds();
+    footerBounds.removeFromTop(getHeight() - 75);
+    footerView.setBounds(footerBounds);
+
     auto arrangementBounds = getLocalBounds();
     arrangementBounds.removeFromTop(headerBounds.getHeight());
+    arrangementBounds.removeFromBottom(footerBounds.getHeight());
     arrangementView.setBounds(arrangementBounds);
 }

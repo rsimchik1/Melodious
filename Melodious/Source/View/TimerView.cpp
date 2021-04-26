@@ -6,19 +6,25 @@ TimerView::TimerView()
 	setColour(borderColourId, juce::Colour(defaultBorderColour));
 	setColour(textColourId, juce::Colour(defaultTextColour));
 
+	auto font = juce::Font("Alata", 20, juce::Font::FontStyleFlags::plain);
+
 	beatText.setEditable(true);
+	beatText.setFont(font);
 	beatText.setColour(juce::Label::textColourId, findColour(textColourId));
 	beatText.setJustificationType(juce::Justification::centred);
 	addAndMakeVisible(beatText);
 	tempoText.setEditable(true);
+	tempoText.setFont(font);
 	tempoText.setColour(juce::Label::textColourId, findColour(textColourId));
 	tempoText.setJustificationType(juce::Justification::centred);
 	addAndMakeVisible(tempoText);
 	meterTopText.setEditable(true);
+	meterTopText.setFont(font);
 	meterTopText.setColour(juce::Label::textColourId, findColour(textColourId));
 	meterTopText.setJustificationType(juce::Justification::centred);
 	addAndMakeVisible(meterTopText);
 	meterBottomText.setEditable(true);
+	meterBottomText.setFont(font);
 	meterBottomText.setColour(juce::Label::textColourId, findColour(textColourId));
 	meterBottomText.setJustificationType(juce::Justification::centred);
 	addAndMakeVisible(meterBottomText);
@@ -26,37 +32,44 @@ TimerView::TimerView()
 	{
 		barText.push_back(new juce::Label());
 		barText[i]->setEditable(true);
+		barText[i]->setFont(font);
 		barText[i]->setColour(juce::Label::textColourId, findColour(textColourId));
 		barText[i]->setJustificationType(juce::Justification::centred);
 		addAndMakeVisible(barText[i]);
 	}
 
 	barLabel.setEditable(false);
+	barLabel.setFont(font);
 	barLabel.setText("BAR", juce::dontSendNotification);
 	barLabel.setColour(juce::Label::textColourId, findColour(textColourId));
 	barLabel.setJustificationType(juce::Justification::centred);
 	addAndMakeVisible(barLabel);
 	barBeatDot.setEditable(false);
+	barBeatDot.setFont(font);
 	barBeatDot.setText(".", juce::dontSendNotification);
 	barBeatDot.setColour(juce::Label::textColourId, findColour(textColourId));
 	barBeatDot.setJustificationType(juce::Justification::centred);
 	addAndMakeVisible(barBeatDot);
 	beatLabel.setEditable(false);
+	beatLabel.setFont(font);
 	beatLabel.setText("BEAT", juce::dontSendNotification);
 	beatLabel.setColour(juce::Label::textColourId, findColour(textColourId));
 	beatLabel.setJustificationType(juce::Justification::centred);
 	addAndMakeVisible(beatLabel);
 	tempoLabel.setEditable(false);
+	tempoLabel.setFont(font);
 	tempoLabel.setText("TEMPO", juce::dontSendNotification);
 	tempoLabel.setColour(juce::Label::textColourId, findColour(textColourId));
 	tempoLabel.setJustificationType(juce::Justification::centred);
 	addAndMakeVisible(tempoLabel);
 	meterLabel.setEditable(false);
+	meterLabel.setFont(font);
 	meterLabel.setText("METER", juce::dontSendNotification);
 	meterLabel.setColour(juce::Label::textColourId, findColour(textColourId));
 	meterLabel.setJustificationType(juce::Justification::centred);
 	addAndMakeVisible(meterSlashText);
 	meterSlashText.setEditable(false);
+	meterSlashText.setFont(font);
 	meterSlashText.setText("/", juce::dontSendNotification);
 	meterSlashText.setColour(juce::Label::textColourId, findColour(textColourId));
 	meterSlashText.setJustificationType(juce::Justification::centred);
