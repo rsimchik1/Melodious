@@ -36,3 +36,14 @@ void ButtonLookAndFeel::drawImageButton(juce::Graphics& g, juce::Image* image,
 	LookAndFeel_V4::drawImageButton(g, image, imageX, imageY, imageW, imageH, 
 									overlayColour, imageOpacity, button);
 }
+
+void ButtonLookAndFeel::setButtonFont(juce::Font font)
+{
+	this->buttonFont = font;
+}
+
+juce::Font ButtonLookAndFeel::getTextButtonFont(juce::TextButton&,
+	int buttonHeight)
+{
+	return buttonFont;
+}

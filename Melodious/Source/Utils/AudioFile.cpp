@@ -54,7 +54,7 @@ void AudioFile::writeBlock(AudioBuffer block)
 			writeBuffer.setSample(channel, frame, 
 										 block.readSampleAt(frame, channel));
 
-	writer->writeFromAudioSampleBuffer(writeBuffer, readWriteHead, numFrames);
+	writer->writeFromAudioSampleBuffer(writeBuffer, 0, numFrames);
 	readWriteHead += numFrames;
 	writer->flush();
 	initializeRead();

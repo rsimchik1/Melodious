@@ -3,7 +3,8 @@
 MainComponent::MainComponent()
     : currentState(TransportController::Stopped),
 	transportController(&currentState),
-    trackListController(std::make_shared<TrackListController>(&mixer, &arrangementView)),
+    fileManager(std::make_shared<FileManager>()),
+    trackListController(std::make_shared<TrackListController>(&mixer, &arrangementView, fileManager)),
 	arrangementView(trackListController)
 {
     if (juce::RuntimePermissions::isRequired (juce::RuntimePermissions::recordAudio)
@@ -37,7 +38,12 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     this->sampleRate = sampleRate;
     timeline = Timeline(sampleRate);
     arrangementView.setSampleRate(sampleRate);
+    trackListController->setSampleRate(sampleRate);
     mixHeaderView.setTimeline(timeline);
+    renderController = std::make_shared<RenderController>(std::shared_ptr<Timeline>(&timeline),
+                                                          std::shared_ptr<ChannelMixer>(&mixer),
+                                                          fileManager);
+    footerView.addObserver(renderController);
 }
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
@@ -81,6 +87,7 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
             currentState = lastState;
             getNextAudioBlock(bufferToFill);
         }
+        break;
         case TransportController::StartRecord:
             currentState = TransportController::Playing;    // TODO change this when implementing recording
             getNextAudioBlock(bufferToFill);

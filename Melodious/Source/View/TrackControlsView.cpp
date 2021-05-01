@@ -32,7 +32,7 @@ TrackControlsView::TrackControlsView()
 
     title.setFont(font);
     title.setText(getName(), juce::NotificationType::dontSendNotification);
-    title.setEditable(false, true, true);
+    title.setEditable(true, true, false);
     title.addListener(this);
     addAndMakeVisible(title);
 
@@ -54,12 +54,12 @@ TrackControlsView::TrackControlsView()
     monitorButton.setButtonText("<");
     monitorButton.setLookAndFeel(buttonLookAndFeel);
     monitorButton.setClickingTogglesState(true);
-    addAndMakeVisible(monitorButton);
+    //addAndMakeVisible(monitorButton);
 
     recordButton.setButtonText("O");
     recordButton.setLookAndFeel(buttonLookAndFeel);
     recordButton.setClickingTogglesState(true);
-    addAndMakeVisible(recordButton);
+    //addAndMakeVisible(recordButton);
 }
 
 TrackControlsView::~TrackControlsView()

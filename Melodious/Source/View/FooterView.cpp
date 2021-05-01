@@ -1,14 +1,12 @@
 #include "FooterView.h"
 
 FooterView::FooterView()
-	: logoImage(juce::ImageFileFormat::loadFrom(BinaryData::iconlarge_png, 
-												BinaryData::iconlarge_pngSize))
+	: logoImage(juce::ImageFileFormat::loadFrom(BinaryData::iconlargesolid_png, 
+												BinaryData::iconlargesolid_pngSize))
 {
 	setColour(backgroundColourId, juce::Colour(defaultBackgroundColour));
 	setColour(borderColourId, juce::Colour(defaultBorderColour));
 	setColour(textColourId, juce::Colour(defaultTextColour));
-
-	;
 
 	logo.setImage(logoImage);
 
@@ -23,6 +21,7 @@ FooterView::FooterView()
 						   juce::Colour(0x44000000));
 	renderButton.setColour(juce::ComboBox::outlineColourId, 
 						   juce::Colours::transparentBlack);
+	renderButton.addListener(this);
 
 	addAndMakeVisible(logo);
 	addAndMakeVisible(renderButton);
@@ -54,4 +53,21 @@ void FooterView::resized()
 	contentBounds.setX(logo.getRight() + padding);
 	contentBounds.setWidth(renderButton.getBestWidthForHeight(contentHeight));
 	renderButton.setBounds(contentBounds);
+}
+
+void FooterView::buttonClicked(juce::Button*)
+{
+	notifyObservers();
+}
+
+void FooterView::showLoadingMessage()
+{
+	renderButton.setEnabled(false);
+	renderButton.setButtonText("Rendering...");
+}
+
+void FooterView::hideLoadingMessage()
+{
+	renderButton.setButtonText("Render");
+	renderButton.setEnabled(true);
 }

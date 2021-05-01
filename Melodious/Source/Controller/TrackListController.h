@@ -12,8 +12,8 @@ class ArrangementView;
 class TrackListController : public Observer<TrackControlsListView>
 {
 public:
-	static FileManager fileManager;
-	TrackListController(ChannelMixer *mixer, ArrangementView *arrangementView, double sampleRate = 44100.0);
+	TrackListController(ChannelMixer *mixer, ArrangementView *arrangementView, 
+						std::shared_ptr<FileManager> fileMananger, double sampleRate = 44100.0);
 	void notify(TrackControlsListView *caller) override;
 	void setSampleRate(double sampleRate);
 private:
@@ -22,4 +22,5 @@ private:
 	std::shared_ptr<ArrangementView> arrangementView;
 	juce::AudioFormatManager formatManager;
 	double sampleRate;
+	std::shared_ptr<FileManager> fileManager;
 };

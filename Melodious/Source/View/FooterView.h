@@ -1,8 +1,12 @@
 #pragma once
 
+#include "ButtonLookAndFeel.h"
 #include "JuceHeader.h"
+#include "../Controller/Observable.h"
 
-class FooterView : public juce::Component
+class FooterView : public juce::Component,
+                   public Observable<FooterView>,
+	public juce::Button::Listener
 {
 public:
 	enum ColourIds
@@ -24,6 +28,9 @@ public:
 
 	void paint(juce::Graphics& g) override;
 	void resized() override;
+	void buttonClicked(juce::Button*) override;
+	void showLoadingMessage();
+	void hideLoadingMessage();
 private:
 	int padding = 10;
 	int borderThickness = 4;
@@ -31,4 +38,5 @@ private:
 	juce::Image logoImage;
 	juce::ImageComponent logo;
 	juce::TextButton renderButton;
+	ButtonLookAndFeel buttonLookAndFeel;
 };

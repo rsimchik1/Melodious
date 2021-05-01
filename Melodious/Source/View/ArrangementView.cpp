@@ -195,7 +195,6 @@ void ArrangementView::paint(juce::Graphics& g)
 void ArrangementView::setSampleRate(int sampleRate)
 {
     this->samplesPerSecond = sampleRate;
-    trackListController->setSampleRate(sampleRate);
     resizeTimeline(samplesPerSecond, beatsPerMinute);
     for (int i = 0; i < numTracks; i++)
     {

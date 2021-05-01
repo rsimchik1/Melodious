@@ -54,7 +54,10 @@ public:
 	 * maintain precision.
 	 */
 	float getSamplesPerBeat(float beatsPerMinute);
+
+	uint64_t getMaxSampleReached();
 private:
 	int sampleRate;
 	uint64_t playbackLocation;
+	uint64_t maxSample = 0;
 };

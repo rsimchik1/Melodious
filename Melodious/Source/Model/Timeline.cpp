@@ -24,6 +24,8 @@ uint64_t Timeline::getPlaybackHead() const
 void Timeline::movePlaybackHead(uint64_t newLocation)
 {
 	playbackLocation = newLocation;
+	if (playbackLocation > maxSample)
+		maxSample = playbackLocation;
 
 	notifyObservers();
 }
@@ -34,9 +36,7 @@ void Timeline::shiftPlaybackHead(int32_t offset)
 	if (newVal < 0 || newVal > UINT32_MAX)
 		throw IndexOutOfBoundsException();
 
-	playbackLocation += offset;
-
-	notifyObservers();
+	movePlaybackHead(playbackLocation + offset);
 }
 
 float Timeline::getSamplesPerBeat(float beatsPerMinute)
@@ -46,4 +46,9 @@ float Timeline::getSamplesPerBeat(float beatsPerMinute)
 
 	float oneBeatPerSecond = 60.0;
 	return (sampleRate / beatsPerMinute) * oneBeatPerSecond;
+}
+
+uint64_t Timeline::getMaxSampleReached()
+{
+	return maxSample;
 }

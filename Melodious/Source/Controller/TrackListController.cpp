@@ -6,12 +6,13 @@
 
 #include <filesystem>
 
-FileManager TrackListController::fileManager;
 
-TrackListController::TrackListController(ChannelMixer* mixer, ArrangementView* arrangementView, double sampleRate)
+TrackListController::TrackListController(ChannelMixer* mixer, ArrangementView* arrangementView,
+										 std::shared_ptr<FileManager> fileManager, double sampleRate)
 	: mixer(std::shared_ptr<ChannelMixer>(mixer)),
 	arrangementView(std::shared_ptr<ArrangementView>(arrangementView)),
-	sampleRate(sampleRate)
+	sampleRate(sampleRate),
+	fileManager(fileManager)
 {
 	formatManager.registerBasicFormats();
 }
@@ -23,7 +24,7 @@ void TrackListController::notify(TrackControlsListView* caller)
 	for (auto file : files)
 	{
 		auto newChannel = std::unique_ptr<LeafChannel>(mixer->createAudioChannel());
-		auto newTrack = std::make_unique<Track<AudioClip>>(new AudioClipReader(&fileManager));
+		auto newTrack = std::make_unique<Track<AudioClip>>(new AudioClipReader(fileManager.get()));
 
 		std::string trackName = "New Track";
 		auto newTrackView = arrangementView->createAndAppendTrack();
@@ -35,8 +36,8 @@ void TrackListController::notify(TrackControlsListView* caller)
 			const double sampleRateScale = sampleRate / sourceSampleRate;
 			auto path = file.getFullPathName().toStdString();
 			trackName = std::filesystem::path(path).stem().string();
-			auto handle = fileManager.addExistingFile(path);
-			auto audioFile = static_cast<AudioFile*>(fileManager.getFile(handle));
+			auto handle = fileManager->addExistingFile(path);
+			auto audioFile = static_cast<AudioFile*>(fileManager->getFile(handle));
 			auto newClip = std::make_unique<AudioClip>();
 			newClip->setStartEndFrames(0, audioFile->getLengthInSamples() * sampleRateScale);
 			newClip->setFileHandle(handle);
@@ -62,5 +63,5 @@ void TrackListController::notify(TrackControlsListView* caller)
 
 void TrackListController::setSampleRate(double sampleRate)
 {
-	sampleRate = sampleRate;
+	this->sampleRate = sampleRate;
 }
