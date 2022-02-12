@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="W4DsqV" name="Melodious" projectType="guiapp" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="0" jucerFormatVersion="1"
-              version="0.1" cppLanguageStandard="latest">
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              version="0.1" cppLanguageStandard="latest" defines="JUCE_MODAL_LOOPS_PERMITTED=1">
   <MAINGROUP id="gpzsIS" name="Melodious">
     <GROUP id="{1587D472-40C7-1A79-0501-4F9CF5E29BAA}" name="Source">
       <GROUP id="{94FD6537-B823-A649-5FBB-F4B0A084400B}" name="Resources">
@@ -32,6 +32,10 @@
         </GROUP>
       </GROUP>
       <GROUP id="{2394106B-8DBA-DD75-BD50-C3A9F8E105DC}" name="Controller">
+        <FILE id="oMhnJa" name="RenderController.cpp" compile="1" resource="0"
+              file="Source/Controller/RenderController.cpp"/>
+        <FILE id="aIHgN4" name="RenderController.h" compile="0" resource="0"
+              file="Source/Controller/RenderController.h"/>
         <FILE id="ekO0wh" name="ClipController.cpp" compile="1" resource="0"
               file="Source/Controller/ClipController.cpp"/>
         <FILE id="JmHNAc" name="ClipController.h" compile="0" resource="0"

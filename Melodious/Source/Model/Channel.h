@@ -20,6 +20,7 @@ class Channel : public AudioNode
 public:
 	Channel();
 	~Channel();
+
 	/**
 	 * Get the output of this channel combined with any children or inputs.
 	 * Children are processed depth-first.
